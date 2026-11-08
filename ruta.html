@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#ffffff">
+<title>Dushi Maps · Rutas del viaje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="lib/maplibre-gl.css">
+<style>
+:root{--g:#0F8C55;--blue:#1A73E8;--ink:#1f2933;--muted:#5f6b76;--day:#F26B5B}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#e9eef2;font-family:Outfit,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+#map{position:absolute;inset:0}
+.maplibregl-ctrl-attrib{font-size:10px}
+
+/* banner de giro */
+#banner{position:absolute;top:calc(12px + env(safe-area-inset-top));left:12px;right:12px;max-width:520px;margin:0 auto;background:var(--g);color:#fff;border-radius:16px;padding:12px 14px;display:flex;gap:12px;align-items:center;box-shadow:0 6px 20px rgba(0,0,0,.25);transform:translateY(-140%);transition:transform .45s cubic-bezier(.2,.9,.3,1.2);z-index:5}
+#banner.on{transform:none}
+#banner .ic{font-size:30px;line-height:1;width:38px;text-align:center}
+#banner .tx b{display:block;font-size:19px;line-height:1.15}
+#banner .tx span{font-size:14px;opacity:.9}
+
+/* tarjeta inferior */
+#card{position:absolute;left:12px;right:12px;bottom:calc(14px + env(safe-area-inset-bottom));max-width:520px;margin:0 auto;background:#fff;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,.25);overflow:hidden;transform:translateY(130%);transition:transform .5s cubic-bezier(.2,.9,.3,1.1);z-index:5}
+#card.on{transform:none}
+#card .row{display:flex;gap:12px;align-items:center;padding:12px 14px}
+#card .em{width:48px;height:48px;border-radius:14px;background:var(--day);display:grid;place-items:center;font-size:26px;flex:0 0 auto}
+#card .nm{font-weight:800;font-size:18px;line-height:1.15}
+#card .sb{font-size:14px;color:var(--muted)}
+#card .eta{margin-left:auto;text-align:right;font-weight:800;color:var(--g);font-size:15px;white-space:nowrap}
+#card .eta small{display:block;color:var(--muted);font-weight:500;font-size:12px}
+#card img{width:100%;height:170px;object-fit:cover;display:none}
+#card.arrived img.has{display:block}
+#card .guia{display:none;padding:0 14px 12px;font-size:14.5px;line-height:1.5;max-height:28vh;overflow:auto;color:#33434d}
+#card.arrived .guia{display:block}
+#card .dots{display:flex;gap:4px;padding:0 14px 12px}
+#card .dots i{flex:1;height:4px;border-radius:4px;background:#e3e8ec}
+#card .dots i.done{background:var(--day)}
+#card .next{display:none;margin:0 14px 12px;width:calc(100% - 28px);border:0;border-radius:12px;padding:11px;font:700 15px Outfit,sans-serif;background:var(--blue);color:#fff;cursor:pointer}
+#card.arrived .next{display:block}
+
+/* controles */
+#ctrl{position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:6}
+#ctrl button{width:46px;height:46px;border-radius:50%;border:0;background:#fff;box-shadow:0 3px 12px rgba(0,0,0,.2);font-size:19px;cursor:pointer}
+#ctrl button.act{background:var(--blue);color:#fff}
+
+/* menú / splash */
+#menu{position:absolute;inset:0;z-index:10;background:linear-gradient(180deg,#ffffff 0%,#f2f6f9 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 18px;text-align:center;overflow:auto}
+#menu.hide{display:none}
+.logo{width:74px;height:74px;animation:drop .9s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes drop{0%{transform:translateY(-120px) scale(.6);opacity:0}100%{transform:none;opacity:1}}
+#menu h1{font-size:34px;margin:12px 0 2px;font-weight:800;letter-spacing:-.02em}
+#menu h1 span{color:#1A73E8}
+#menu p{margin:0 0 18px;color:var(--muted)}
+.days{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:440px}
+.days button{border:0;border-radius:16px;padding:14px 12px;text-align:left;font:600 15px Outfit,sans-serif;color:#fff;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.days button small{display:block;font-weight:500;opacity:.92;font-size:12.5px;margin-top:2px}
+.days button.sel{outline:4px solid #1f2933;outline-offset:2px}
+.opts{display:flex;flex-direction:column;gap:10px;margin:18px 0 6px;width:100%;max-width:440px;text-align:left}
+.opts label{display:flex;gap:12px;align-items:center;background:#fff;border-radius:14px;padding:12px 14px;box-shadow:0 0 0 1px #e3e8ec;cursor:pointer;font-size:15px}
+.opts input{width:22px;height:22px;accent-color:var(--blue);flex:0 0 auto}
+.opts small{display:block;color:var(--muted);font-size:12.5px}
+#go{margin-top:10px;width:100%;max-width:440px;border:0;border-radius:16px;padding:16px;font:800 18px Outfit,sans-serif;background:var(--blue);color:#fff;cursor:pointer;box-shadow:0 8px 20px rgba(26,115,232,.35)}
+#back{margin-top:12px;color:var(--muted);font-size:14px}
+
+/* aviso final / descarga */
+#done{position:absolute;inset:0;z-index:11;background:rgba(15,25,35,.75);display:none;align-items:center;justify-content:center;padding:20px}
+#done.on{display:flex}
+#done .box{background:#fff;border-radius:22px;padding:22px;max-width:380px;width:100%;text-align:center}
+#done h2{margin:6px 0 8px}
+#done a,#done button{display:block;width:100%;margin-top:10px;border:0;border-radius:14px;padding:14px;font:700 16px Outfit,sans-serif;text-decoration:none;cursor:pointer}
+#done .dl{background:var(--blue);color:#fff}
+#done .sh{background:#25D366;color:#fff}
+#done .ag{background:#eef2f5;color:var(--ink)}
+#toast{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(20,30,40,.85);color:#fff;padding:12px 16px;border-radius:12px;font-size:14px;z-index:12;display:none;text-align:center;max-width:80%}
+#rec{position:absolute;left:12px;top:calc(104px + env(safe-area-inset-top));z-index:7;background:#d93025;color:#fff;font-weight:700;font-size:13px;padding:6px 10px;border-radius:999px;display:none}
+#rec.on{display:block;animation:blink 1.2s infinite}
+@keyframes blink{50%{opacity:.55}}
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="rec">● REC</div>
+<div id="banner"><div class="ic" id="bIc">↑</div><div class="tx"><b id="bTx">Sigue derecho</b><span id="bSub"></span></div></div>
+<div id="card"><img id="cImg" alt=""><div class="row"><div class="em" id="cEm">📍</div><div><div class="nm" id="cNm"></div><div class="sb" id="cSb"></div></div><div class="eta" id="cEta"></div></div><div class="guia" id="cGuia"></div><button class="next" id="cNext">Siguiente parada ▶</button><div class="dots" id="cDots"></div></div>
+<div id="ctrl" hidden><button id="bPlay" title="Pausa">⏸</button><button id="bFast" title="Más rápido">⏩</button><button id="bVoice" title="Voz del guía">🔊</button><button id="bExit" title="Salir">✕</button></div>
+
+<div id="menu">
+  <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 4C20 4 11 13 11 25c0 15 18 32 20 34a1.5 1.5 0 0 0 2 0c2-2 20-19 20-34C53 13 44 4 32 4z" fill="#EA4335"/><path d="M32 4c12 0 21 9 21 21 0 6-3 12-7 18L32 25z" fill="#4285F4"/><path d="M11 25C11 13 20 4 32 4v21L18 43c-4-6-7-12-7-18z" fill="#34A853"/><path d="M18 43l14-18 14 18c-6 8-12 14-13 16a1.5 1.5 0 0 1-2 0c-1-2-7-8-13-16z" fill="#FBBC04"/><circle cx="32" cy="25" r="8" fill="#fff"/></svg>
+  <h1><span>Dushi</span> Maps</h1>
+  <p>La ruta de cada día, como si ya estuviéramos allá</p>
+  <div class="days" id="days"></div>
+  <div class="opts">
+    <label><input type="checkbox" id="oVoice" checked><span>🎧 Guía con voz<small>Cuenta la historia de cada lugar al llegar</small></span></label>
+    <label><input type="checkbox" id="oRec"><span>🎬 Grabar como video<small>Al final podrás descargarlo y mandarlo por WhatsApp (sin voz)</small></span></label>
+  </div>
+  <button id="go">▶ Ver la ruta</button>
+  <a id="back" href="index.html">← Volver al itinerario</a>
+</div>
+
+<div id="done"><div class="box"><div style="font-size:42px">🎉</div><h2>¡Ruta completa!</h2><p id="dTx" style="color:var(--muted);margin:0">Bon bini na Kòrsou</p><div id="dBtns"></div><button class="ag" id="dAgain">Ver otro día</button></div></div>
+<div id="toast"></div>
+
+<script src="lib/maplibre-gl.js"></script>
+<script src="data.js"></script>
+<script>
+/* ================= util ================= */
+const $=id=>document.getElementById(id);
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const R=Math.PI/180;
+function hav(a,b){const dLat=(b[1]-a[1])*R,dLng=(b[0]-a[0])*R;const s=Math.sin(dLat/2)**2+Math.cos(a[1]*R)*Math.cos(b[1]*R)*Math.sin(dLng/2)**2;return 12742000*Math.asin(Math.sqrt(s))}
+function bearing(a,b){const y=Math.sin((b[0]-a[0])*R)*Math.cos(b[1]*R);const x=Math.cos(a[1]*R)*Math.sin(b[1]*R)-Math.sin(a[1]*R)*Math.cos(b[1]*R)*Math.cos((b[0]-a[0])*R);return (Math.atan2(y,x)/R+360)%360}
+function lerpAng(a,b,t){let d=((b-a+540)%360)-180;return (a+d*t+360)%360}
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+function fmtDist(m){return m>=1000?(m/1000).toFixed(m>=10000?0:1).replace('.',',')+' km':Math.round(m/10)*10+' m'}
+function toast(t,ms=2500){const el=$('toast');el.textContent=t;el.style.display='block';clearTimeout(toast.h);toast.h=setTimeout(()=>el.style.display='none',ms)}
+const store={get(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+/* ================= rutas ================= */
+function arc(a,b,n=120){ // arco geodésico simple con "altura" visual
+  const pts=[];for(let i=0;i<=n;i++){const t=i/n;pts.push([a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t+Math.sin(Math.PI*t)*1.2])}return pts}
+function straight(a,b){const n=Math.max(2,Math.ceil(hav(a,b)/40));const pts=[];for(let i=0;i<=n;i++){const t=i/n;pts.push([a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t])}return pts}
+async function getRoute(a,b,mode){
+  if(mode==='air')return {coords:arc(a,b),steps:[]};
+  const key='rt_'+mode+'_'+a.join(',')+'_'+b.join(',');
+  const c=store.get(key,null); if(c)return c;
+  const base=mode==='foot'?'https://routing.openstreetmap.de/routed-foot/route/v1/driving/':'https://router.project-osrm.org/route/v1/driving/';
+  try{
+    const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),8000);
+    const r=await fetch(base+a.join(',')+';'+b.join(',')+'?overview=full&geometries=geojson&steps=true',{signal:ctl.signal});clearTimeout(to);
+    const j=await r.json();if(!j.routes||!j.routes[0])throw 0;
+    const rt=j.routes[0];const steps=[];let acc=0;
+    rt.legs[0].steps.forEach(s=>{steps.push({at:acc,type:s.maneuver.type,mod:s.maneuver.modifier||'',name:s.name||'',exit:s.maneuver.exit||0});acc+=s.distance});
+    const out={coords:[a,...rt.geometry.coordinates,b],steps};store.set(key,out);return out;
+  }catch(e){return {coords:straight(a,b),steps:[]}}
+}
+const ARW={left:'↰',right:'↱','slight left':'↖','slight right':'↗','sharp left':'↰','sharp right':'↱',straight:'↑',uturn:'↶'};
+const DIR={left:'a la izquierda',right:'a la derecha','slight left':'levemente a la izquierda','slight right':'levemente a la derecha','sharp left':'fuerte a la izquierda','sharp right':'fuerte a la derecha',straight:'derecho',uturn:'en U'};
+function instr(s){
+  const en=s.name?' en '+s.name:'', por=s.name?' por '+s.name:'';const d=DIR[s.mod]||'';
+  switch(s.type){
+    case 'depart':return ['↑','Sal'+por];
+    case 'arrive':return ['📍','Llegaste'];
+    case 'roundabout':case 'rotary':case 'roundabout turn':return ['⟳','En la glorieta, toma la '+(s.exit?s.exit+'.ª ':'')+'salida'+(s.name?' hacia '+s.name:'')];
+    case 'fork':return [ARW[s.mod]||'↑','En la bifurcación, mantente '+d];
+    case 'merge':return [ARW[s.mod]||'↑','Incorpórate'+en];
+    case 'end of road':return [ARW[s.mod]||'↑','Al final de la vía, gira '+d+en];
+    case 'new name':case 'continue':return ['↑','Continúa'+por];
+    default: if(s.mod==='straight')return ['↑','Sigue derecho'+por]; return [ARW[s.mod]||'↑','Gira '+d+en];
+  }
+}
+
+/* ================= mapa ================= */
+const map=new maplibregl.Map({container:'map',style:'https://tiles.openfreemap.org/styles/liberty',center:[-68.96,12.15],zoom:10.3,pitch:0,attributionControl:{compact:true},preserveDrawingBuffer:true,fadeDuration:0});
+let mapReady=new Promise(r=>map.on('load',r));
+let styleOK=false;map.on('load',()=>styleOK=true);
+setTimeout(()=>{if(!styleOK)toast('El mapa está cargando lento. Revisa tu conexión a internet.',4000)},9000);
+map.on('error',e=>{console.warn('map',e&&e.error&&e.error.message)});
+map.on('load',()=>{
+  map.addSource('full',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
+  map.addSource('prog',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
+  map.addSource('puck',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
+  map.addSource('stops',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
+  map.addLayer({id:'full',type:'line',source:'full',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#7fa9e8','line-width':6,'line-opacity':.55,'line-dasharray':[1,1.6]}});
+  map.addLayer({id:'progC',type:'line',source:'prog',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#ffffff','line-width':11}});
+  map.addLayer({id:'prog',type:'line',source:'prog',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#1A73E8','line-width':7}});
+  map.addLayer({id:'stopsC',type:'circle',source:'stops',paint:{'circle-radius':11,'circle-color':['get','c'],'circle-stroke-color':'#fff','circle-stroke-width':3}});
+  map.addLayer({id:'stopsT',type:'symbol',source:'stops',layout:{'text-field':['get','n'],'text-font':['Noto Sans Bold'],'text-size':13,'text-offset':[0,1.6],'text-anchor':'top','text-allow-overlap':false},paint:{'text-color':'#1f2933','text-halo-color':'#fff','text-halo-width':2}});
+  map.addLayer({id:'puckH',type:'circle',source:'puck',paint:{'circle-radius':22,'circle-color':'#1A73E8','circle-opacity':.18}});
+  map.addLayer({id:'puck',type:'circle',source:'puck',paint:{'circle-radius':9,'circle-color':'#1A73E8','circle-stroke-color':'#fff','circle-stroke-width':3.5}});
+});
+const fc=f=>({type:'FeatureCollection',features:f});
+const line=c=>({type:'Feature',geometry:{type:'LineString',coordinates:c}});
+const pt=(c,p={})=>({type:'Feature',properties:p,geometry:{type:'Point',coordinates:c}});
+function idle(ms=3500){return Promise.race([new Promise(r=>map.once('idle',r)),sleep(ms)])}
+
+/* ================= estado ================= */
+let DAY=location.hash.slice(1)||'lun'; if(!ROUTES[DAY])DAY='lun';
+let paused=false, speed=1, voiceOn=true, running=false, abortRun=false, skipWait=null;
+const st={banner:null,card:null,arrived:false,intro:0,outro:0,photo:null};
+
+function buildMenu(){
+  $('days').innerHTML=Object.entries(ROUTES).map(([k,r])=>`<button data-d="${k}" style="background:${r.color}" class="${k===DAY?'sel':''}">${r.title.split(' · ')[0]}<small>${r.title.split(' · ')[1]}</small></button>`).join('');
+}
+$('days').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;DAY=b.dataset.d;history.replaceState(null,'','#'+DAY);buildMenu()});
+buildMenu();
+
+/* ================= UI helpers ================= */
+function setBanner(ic,tx,sub){ $('bIc').textContent=ic;$('bTx').textContent=tx;$('bSub').textContent=sub||'';$('banner').classList.add('on');st.banner={ic,tx,sub}}
+function hideBanner(){$('banner').classList.remove('on');st.banner=null}
+function setCard(stop,i,n,arrived){
+  const P=PLACES[stop.p];const day=ROUTES[DAY];
+  document.documentElement.style.setProperty('--day',day.color);
+  $('cEm').textContent=P.e;$('cNm').textContent=P.n;$('cSb').textContent=stop.s;
+  $('cEta').innerHTML=stop.t+'<small>'+(arrived?'llegamos':'próxima parada')+'</small>';
+  $('cDots').innerHTML=Array.from({length:n},(_,k)=>`<i class="${k<=i?'done':''}"></i>`).join('');
+  const img=$('cImg'); if(arrived&&P.img){img.src=P.img;img.classList.add('has')}else{img.classList.remove('has')}
+  $('cGuia').textContent=arrived&&GUIA[stop.p]?GUIA[stop.p]:'';
+  $('card').classList.toggle('arrived',!!arrived);$('card').classList.add('on');
+  st.card={e:P.e,n:P.n,s:stop.s,t:stop.t,i,total:n,arrived,g:arrived?GUIA[stop.p]||'':'' };
+  if(arrived&&P.img){const im=new Image();im.src=P.img;st.photo=im}else st.photo=null;
+}
+function voice(){const v=speechSynthesis.getVoices();return v.find(x=>/es[-_](CO|MX|US|419)/i.test(x.lang))||v.find(x=>/^es/i.test(x.lang))}
+function speak(t){return new Promise(res=>{try{if(!voiceOn||recording||!t){res();return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='es-ES';const v=voice();if(v)u.voice=v;u.onend=res;u.onerror=res;speechSynthesis.speak(u)}catch(e){res()}})}
+async function waitPaused(){while(paused&&!abortRun)await sleep(120)}
+
+/* ================= animación ================= */
+function frame(){return new Promise(r=>requestAnimationFrame(r))}
+async function animateLeg(route,mode,from,to){
+  const c=route.coords;const cum=[0];for(let i=1;i<c.length;i++)cum.push(cum[i-1]+hav(c[i-1],c[i]));
+  const total=cum[cum.length-1]||1;
+  map.getSource('full').setData(fc([line(c)]));
+  const km=total/1000;
+  let dur= mode==='air'?8000 : mode==='foot'? Math.min(7000,Math.max(3200,total*14)) : Math.min(15000,Math.max(5500,km*700));
+  const zoom= mode==='air'?5.2 : mode==='foot'?17.2 : km>18?12.6 : km>6?13.6 : 14.6;
+  const pitch= mode==='air'?25:62; const look= mode==='air'?60000: mode==='foot'?25:180;
+  function at(d){let i=1;while(i<cum.length-1&&cum[i]<d)i++;const seg=cum[i]-cum[i-1]||1;const t=(d-cum[i-1])/seg;return {p:[c[i-1][0]+(c[i][0]-c[i-1][0])*t,c[i-1][1]+(c[i][1]-c[i-1][1])*t],i}}
+  let br=bearing(c[0],at(Math.min(total,look)).p);
+  if(mode==='air'){map.jumpTo({center:c[0],zoom:4.6,pitch:0,bearing:0})}
+  else map.jumpTo({center:c[0],zoom,pitch,bearing:br});
+  await idle();
+  const steps=route.steps||[];
+  let t0=performance.now(),elapsed=0,last=t0;
+  while(elapsed<dur){
+    if(abortRun)return;
+    await frame();const now=performance.now();
+    if(!paused)elapsed+=(now-last)*speed;last=now;
+    const k=ease(Math.min(1,elapsed/dur));const d=k*total;
+    const cur=at(d),ahead=at(Math.min(total,d+look));
+    if(hav(cur.p,ahead.p)>2)br=lerpAng(br,bearing(cur.p,ahead.p),mode==='air'?.05:.08);
+    map.getSource('prog').setData(fc([line([...c.slice(0,cur.i),cur.p])]));
+    map.getSource('puck').setData(fc([pt(cur.p)]));
+    if(mode==='air'){const z=4.6+Math.sin(Math.PI*k)*-0.4;map.jumpTo({center:cur.p,zoom:z+0.6,pitch,bearing:0})}
+    else map.jumpTo({center:cur.p,zoom,pitch,bearing:br});
+    // banner
+    if(mode==='air'){setBanner('✈️','Volando a '+PLACES[to].n,fmtDist(total-d)+' restantes')}
+    else if(steps.length){let nx=steps.find(s=>s.at>d+5&&s.type!=='depart');
+      if(!nx||nx.type==='arrive'){setBanner('📍',PLACES[to].n,'en '+fmtDist(Math.max(0,total-d)))}
+      else{const [ic,tx]=instr(nx);setBanner(ic,tx,'en '+fmtDist(nx.at-d))}}
+    else setBanner(mode==='foot'?'🚶':'↑',(mode==='foot'?'Caminando a ':'Rumbo a ')+PLACES[to].n,fmtDist(Math.max(0,total-d)));
+  }
+}
+async function arrive(stop,i,n){
+  hideBanner();setCard(stop,i,n,true);
+  map.easeTo({zoom:map.getZoom()+0.8,pitch:55,bearing:map.getBearing()+45,duration:2600});
+  const g=GUIA[stop.p];
+  let resolveSkip;const skip=new Promise(r=>resolveSkip=r);skipWait=resolveSkip;
+  const base=recording?5200:6500;
+  await Promise.race([Promise.all([sleep(base/speed),speak(g)]),skip]);
+  if(!recording)await waitPaused();
+  try{speechSynthesis.cancel()}catch(e){}
+  skipWait=null;
+}
+$('cNext').onclick=()=>{if(skipWait)skipWait()};
+
+async function run(){
+  await mapReady;
+  const R0=ROUTES[DAY];const stops=R0.stops;running=true;abortRun=false;
+  document.documentElement.style.setProperty('--day',R0.color);
+  // marcadores
+  map.getSource('stops').setData(fc(stops.map((s,k)=>pt(PLACES[s.p].ll,{n:PLACES[s.p].n,c:R0.color}))));
+  map.getSource('prog').setData(fc([]));map.getSource('full').setData(fc([]));
+  // pre-carga rutas
+  toast('Calculando la ruta…',1800);
+  const legs=[];for(let i=1;i<stops.length;i++)legs.push(getRoute(PLACES[stops[i-1].p].ll,PLACES[stops[i].p].ll,stops[i].m||'car'));
+  const rts=await Promise.all(legs);
+  // intro
+  const b=new maplibregl.LngLatBounds();stops.forEach(s=>b.extend(PLACES[s.p].ll));
+  map.fitBounds(b,{padding:{top:120,bottom:200,left:40,right:40},pitch:0,bearing:0,duration:0,maxZoom:14});
+  await idle(5000);
+  if(recording)startRec();
+  st.intro=performance.now();
+  setCard(stops[0],0,stops.length,true);$('cGuia').textContent='';st.card.g='';
+  await sleep(2600);
+  for(let i=1;i<stops.length&&!abortRun;i++){
+    setCard(stops[i],i-1,stops.length,false);
+    await waitPaused();
+    await animateLeg(rts[i-1],stops[i].m||'car',stops[i-1].p,stops[i].p);
+    if(abortRun)break;
+    await arrive(stops[i],i,stops.length);
+  }
+  hideBanner();
+  if(!abortRun){st.outro=performance.now();map.fitBounds(b,{padding:{top:120,bottom:200,left:40,right:40},pitch:0,bearing:0,duration:2500,maxZoom:14});await sleep(3200)}
+  running=false;
+  if(recording)await stopRec();
+  if(!abortRun)showDone();
+}
+function showDone(){
+  const btns=$('dBtns');btns.innerHTML='';
+  if(lastVideo){const a=document.createElement('a');a.className='dl';a.href=lastVideo.url;a.download=lastVideo.name;a.textContent='⬇️ Descargar video';btns.appendChild(a);
+    if(navigator.canShare&&navigator.canShare({files:[lastVideo.file]})){const s=document.createElement('button');s.className='sh';s.textContent='📲 Compartir (WhatsApp)';s.onclick=()=>navigator.share({files:[lastVideo.file],title:'Dushi Trip · '+ROUTES[DAY].title}).catch(()=>{});btns.appendChild(s)}}
+  $('dTx').textContent=ROUTES[DAY].title;$('done').classList.add('on');
+}
+$('dAgain').onclick=()=>{$('done').classList.remove('on');exitToMenu()};
+
+/* ================= grabación (canvas compuesto 9:16) ================= */
+let recording=false,recorder=null,chunks=[],recCv=null,recCtx=null,recRAF=0,lastVideo=null;
+let MIME='';
+function pickMime(){const c=['video/mp4;codecs=avc1.42E01E','video/mp4','video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm'];return c.filter(m=>window.MediaRecorder&&MediaRecorder.isTypeSupported(m))}
+async function probeMime(){ // prueba real: algunos navegadores dicen soportar mp4 pero no graban nada
+  for(const m of pickMime()){try{const cv=document.createElement('canvas');cv.width=320;cv.height=240;const cx=cv.getContext('2d');let n=0,size=0;const rec=new MediaRecorder(cv.captureStream(30),{mimeType:m});rec.ondataavailable=e=>size+=e.data.size;
+    const iv=setInterval(()=>{cx.fillStyle='hsl('+(n++*20)+',70%,50%)';cx.fillRect(0,0,320,240)},33);rec.start(200);await sleep(900);await new Promise(r=>{rec.onstop=r;rec.stop()});clearInterval(iv);if(size>2000)return m}catch(e){}}
+  return ''}
+function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+function wrap(ctx,t,x,y,mw,lh,max){const w=t.split(' ');let l='',n=0;for(const word of w){const tt=l?l+' '+word:word;if(ctx.measureText(tt).width>mw&&l){ctx.fillText(l,x,y+n*lh);n++;l=word;if(n>=max){return}}else l=tt}if(n<max)ctx.fillText(l,x,y+n*lh)}
+function fit(ctx,t,mw,px,w,F){let z=px;do{ctx.font=w+' '+z+'px '+F;z-=2}while(ctx.measureText(t).width>mw&&z>14)}
+function drawRec(){
+  const W=recCv.width,H=recCv.height,ctx=recCtx;const src=map.getCanvas();
+  const sw=src.width,sh=src.height,ar=W/H;let cw=sw,ch=sw/ar;if(ch>sh){ch=sh;cw=sh*ar}
+  ctx.drawImage(src,(sw-cw)/2,(sh-ch)/2,cw,ch,0,0,W,H);
+  const F='Outfit, system-ui, sans-serif';
+  // banner
+  if(st.banner){ctx.fillStyle='#0F8C55';rr(ctx,24,40,W-48,120,26);ctx.fill();ctx.fillStyle='#fff';ctx.font='700 54px '+F;ctx.fillText(st.banner.ic,48,118);fit(ctx,st.banner.tx,W-170,34,'800',F);ctx.fillText(st.banner.tx,120,92);ctx.font='500 26px '+F;ctx.globalAlpha=.9;ctx.fillText(st.banner.sub||'',120,136);ctx.globalAlpha=1}
+  // tarjeta
+  if(st.card){const c=st.card;let h=150,ph=0;if(c.arrived&&st.photo&&st.photo.complete){ph=300}if(c.arrived&&c.g)h+=170;h+=ph;const y=H-h-40;
+    ctx.fillStyle='#fff';rr(ctx,24,y,W-48,h,30);ctx.fill();
+    if(ph){ctx.save();rr(ctx,24,y,W-48,ph+30,30);ctx.clip();const im=st.photo;const r=Math.max((W-48)/im.width,ph/im.height);ctx.drawImage(im,24+(W-48-im.width*r)/2,y+(ph-im.height*r)/2,im.width*r,im.height*r);ctx.restore();ctx.fillStyle='#fff';ctx.fillRect(24,y+ph,W-48,30)}
+    const yy=y+ph;ctx.fillStyle=ROUTES[DAY].color;rr(ctx,48,yy+26,84,84,22);ctx.fill();ctx.font='48px '+F;ctx.textAlign='center';ctx.fillText(c.e,90,yy+86);ctx.textAlign='left';
+    ctx.fillStyle='#1f2933';fit(ctx,c.n,W-370,34,'800',F);ctx.fillText(c.n,150,yy+62);ctx.fillStyle='#5f6b76';fit(ctx,c.s,W-370,25,'500',F);ctx.fillText(c.s,150,yy+98);
+    ctx.textAlign='right';ctx.fillStyle='#0F8C55';ctx.font='800 28px '+F;ctx.fillText(c.t,W-50,yy+62);ctx.fillStyle='#5f6b76';ctx.font='500 22px '+F;ctx.fillText(c.arrived?'llegamos':'próxima',W-50,yy+94);ctx.textAlign='left';
+    if(c.arrived&&c.g){ctx.fillStyle='#33434d';ctx.font='500 24px '+F;wrap(ctx,c.g,48,yy+150,W-96,32,5)}
+    // puntos
+    const dw=(W-96)/c.total;for(let k=0;k<c.total;k++){ctx.fillStyle=k<=c.i?ROUTES[DAY].color:'#e3e8ec';rr(ctx,48+k*dw,y+h-22,dw-6,7,4);ctx.fill()}
+  }
+  // intro y outro
+  const now=performance.now();
+  const titleCard=(alpha,big,small)=>{ctx.globalAlpha=alpha;ctx.fillStyle='#ffffff';ctx.fillRect(0,0,W,H);ctx.textAlign='center';ctx.font='800 76px '+F;ctx.textAlign='left';const w1=ctx.measureText('Dushi ').width,w2=ctx.measureText('Maps').width,x0=W/2-(w1+w2)/2;ctx.fillStyle='#1A73E8';ctx.fillText('Dushi ',x0,H/2-10);ctx.fillStyle='#1f2933';ctx.fillText('Maps',x0+w1,H/2-10);ctx.textAlign='center';ctx.font='600 36px '+F;ctx.fillStyle=ROUTES[DAY].color;ctx.fillText(big,W/2,H/2+60);ctx.font='500 28px '+F;ctx.fillStyle='#5f6b76';ctx.fillText(small,W/2,H/2+110);ctx.textAlign='left';ctx.globalAlpha=1};
+  const ti=(now-st.intro)/1000;if(st.intro&&ti<2.4){titleCard(ti<1.6?1:Math.max(0,1-(ti-1.6)/0.8),ROUTES[DAY].title,'Dushi Trip · Curaçao 2026')}
+  const to=(now-st.outro)/1000;if(st.outro&&to>1.2){titleCard(Math.min(1,(to-1.2)/0.8),'Bon bini na Kòrsou 🇨🇼','Familia · 6 al 10 de diciembre')}
+  recRAF=requestAnimationFrame(drawRec);
+}
+function startRec(){
+  const mime=MIME;if(!mime||!HTMLCanvasElement.prototype.captureStream){toast('Este navegador no permite grabar video. Prueba en Chrome.');recording=false;$('rec').classList.remove('on');return}
+  recCv=document.createElement('canvas');recCv.width=720;recCv.height=1280;recCtx=recCv.getContext('2d');
+  chunks=[];recorder=new MediaRecorder(recCv.captureStream(30),{mimeType:mime,videoBitsPerSecond:6e6});
+  recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};recorder.start(500);drawRec();
+}
+function stopRec(){return new Promise(res=>{if(!recorder){res();return}
+  setTimeout(()=>{recorder.onstop=()=>{cancelAnimationFrame(recRAF);const type=recorder.mimeType||'video/webm';const ext=type.includes('mp4')?'mp4':'webm';const blob=new Blob(chunks,{type});const name='DushiTrip-'+DAY+'.'+ext;lastVideo={url:URL.createObjectURL(blob),name,file:new File([blob],name,{type})};recorder=null;$('rec').classList.remove('on');res()};recorder.stop()},900)})}
+
+/* ================= controles ================= */
+$('go').onclick=async()=>{
+  voiceOn=$('oVoice').checked;recording=$('oRec').checked;lastVideo=null;
+  try{if(voiceOn&&!recording){const u=new SpeechSynthesisUtterance(' ');speechSynthesis.speak(u)}}catch(e){}
+  $('menu').classList.add('hide');$('ctrl').hidden=false;$('bVoice').classList.toggle('act',voiceOn);
+  if(recording){toast('Preparando la grabación…',1500);MIME=await probeMime();$('rec').classList.add('on');toast('Grabando… deja la pantalla quieta hasta el final',3500)}
+  st.intro=0;st.outro=0;paused=false;speed=1;$('bFast').classList.remove('act');$('bPlay').textContent='⏸';
+  run();
+};
+$('bPlay').onclick=()=>{paused=!paused;$('bPlay').textContent=paused?'▶':'⏸';try{paused?speechSynthesis.pause():speechSynthesis.resume()}catch(e){}};
+$('bFast').onclick=()=>{speed=speed===1?2.2:1;$('bFast').classList.toggle('act',speed>1)};
+$('bVoice').onclick=()=>{voiceOn=!voiceOn;$('bVoice').classList.toggle('act',voiceOn);if(!voiceOn)try{speechSynthesis.cancel()}catch(e){}};
+function exitToMenu(){abortRun=true;if(skipWait)skipWait();try{speechSynthesis.cancel()}catch(e){}if(recorder){try{recorder.stop()}catch(e){}recorder=null;cancelAnimationFrame(recRAF)}$('rec').classList.remove('on');hideBanner();$('card').classList.remove('on');$('ctrl').hidden=true;$('menu').classList.remove('hide');buildMenu()}
+$('bExit').onclick=exitToMenu;
+</script>
+</body>
+</html>

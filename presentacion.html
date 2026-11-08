@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#000000">
+<title>Dushi Trip · La revelación</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="lib/maplibre-gl.css">
+<style>
+:root{--ocean:#0E3B53;--sea:#1FB5B0;--coral:#F26B5B;--sun:#F6C343;--mint:#7FD1AE;--lav:#9B8BD6}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#000;color:#fff;font-family:Outfit,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:5vmin;opacity:0;visibility:hidden;transition:opacity .9s ease,visibility 0s .9s}
+.slide.on{opacity:1;visibility:visible;transition:opacity .9s ease}
+h1,h2{font-family:Fraunces,Georgia,serif;margin:0;line-height:1}
+.hint{position:fixed;bottom:2.5vmin;left:0;right:0;text-align:center;font-size:clamp(12px,1.6vmin,16px);opacity:.55;z-index:20;pointer-events:none}
+#bar{position:fixed;top:0;left:0;height:4px;background:var(--sun);z-index:20;transition:width .6s}
+#fs{position:fixed;top:2vmin;right:2vmin;z-index:21;background:rgba(255,255,255,.15);color:#fff;border:0;border-radius:999px;padding:8px 14px;font:600 14px Outfit,sans-serif;cursor:pointer}
+
+/* 0 inicio */
+#s0 .btn{margin-top:4vmin;background:var(--sun);color:var(--ocean);border-radius:999px;padding:2vmin 5vmin;font-weight:800;font-size:clamp(18px,3vmin,30px)}
+#s0 h2{font-size:clamp(28px,6vmin,64px)}
+
+/* 1 máquina de escribir */
+#s1 .type{font-family:Fraunces,serif;font-size:clamp(28px,7vmin,80px);min-height:1.2em}
+#s1 .type::after{content:"|";animation:blink 1s infinite;color:var(--sun)}
+@keyframes blink{50%{opacity:0}}
+
+/* 2 revelación */
+#s2{background:radial-gradient(circle at 50% 30%,#155a7c 0%,#0E3B53 60%,#06202e 100%)}
+#s2 .big{display:flex;gap:.04em;font-family:Fraunces,serif;font-weight:900;font-size:clamp(56px,17vmin,220px);line-height:1}
+#s2 .big span{display:inline-block;opacity:0;transform:translateY(60px) rotate(-8deg)}
+#s2.on .big span{animation:pop .7s cubic-bezier(.3,1.6,.5,1) forwards}
+@keyframes pop{to{opacity:1;transform:none}}
+#s2 .sub{font-size:clamp(18px,3.4vmin,40px);margin-top:3vmin;opacity:0}
+#s2.on .sub{animation:fadeup 1s 1.6s forwards}
+@keyframes fadeup{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.facades{position:absolute;left:0;right:0;bottom:0;height:24vh;display:flex;align-items:flex-end;gap:.6vmin}
+.facades span{flex:1;border-radius:1vmin 1vmin 0 0;transform:scaleY(0);transform-origin:bottom}
+#s2.on .facades span{animation:rise 1s cubic-bezier(.2,.9,.3,1) forwards}
+@keyframes rise{to{transform:scaleY(1)}}
+.facades span::after{content:"";display:block;margin:2.2vh auto 0;width:36%;height:3vh;border-radius:1vmin 1vmin 0 0;background:rgba(255,255,255,.55)}
+canvas#conf{position:absolute;inset:0;pointer-events:none}
+
+/* 3 vuelo */
+#s3{padding:0}
+#fmap{position:absolute;inset:0}
+#s3 .cap{position:absolute;left:50%;bottom:7vh;transform:translateX(-50%);background:rgba(14,59,83,.92);border-radius:2.4vmin;padding:2.4vmin 4vmin;min-width:min(90vw,640px)}
+#s3 .cap b{font-family:Fraunces,serif;font-size:clamp(24px,5vmin,56px);display:block}
+#s3 .cap span{font-size:clamp(14px,2.6vmin,28px);opacity:.9}
+
+/* 4 hotel */
+#s4{padding:0}
+#s4 .bg{position:absolute;inset:-5%;background:url(img/resort.jpg) center/cover}
+#s4.on .bg{animation:kb 14s ease-out forwards}
+@keyframes kb{from{transform:scale(1.15)}to{transform:scale(1)}}
+#s4 .ov{position:relative;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.65) 100%);position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:6vmin}
+#s4 h2{font-size:clamp(40px,9vmin,110px)}
+.chips{display:flex;flex-wrap:wrap;gap:1.4vmin;justify-content:center;margin-top:2.4vmin}
+.chips span{background:rgba(255,255,255,.18);backdrop-filter:blur(6px);border-radius:999px;padding:1.2vmin 2.6vmin;font-weight:600;font-size:clamp(14px,2.4vmin,26px)}
+
+/* días */
+.day{background:var(--c)}
+.day .wrap{display:grid;grid-template-columns:1fr;gap:4vmin;align-items:center;max-width:1300px;width:100%}
+@media(min-aspect-ratio:4/3){.day .wrap{grid-template-columns:1.1fr 1fr;text-align:left}}
+.day .k{font-size:clamp(14px,2.6vmin,28px);letter-spacing:.2em;text-transform:uppercase;font-weight:700;opacity:.9}
+.day h2{font-size:clamp(34px,8vmin,100px);margin:1.2vmin 0 2.4vmin}
+.day ul{list-style:none;margin:0;padding:0;display:grid;gap:1.6vmin}
+.day li{font-size:clamp(16px,3vmin,34px);font-weight:600;opacity:0;transform:translateX(-30px)}
+.day.on li{animation:inx .6s forwards}
+@keyframes inx{to{opacity:1;transform:none}}
+.day .pic{border-radius:3vmin;overflow:hidden;aspect-ratio:4/3;box-shadow:0 3vmin 6vmin rgba(0,0,0,.3);background:rgba(255,255,255,.15);display:grid;place-items:center;font-size:20vmin}
+.day .pic img{width:100%;height:100%;object-fit:cover}
+.day.on .pic{animation:zoomin 1.2s cubic-bezier(.2,.9,.3,1) both}
+@keyframes zoomin{from{transform:scale(.85) rotate(-3deg);opacity:0}to{transform:none;opacity:1}}
+
+/* pases */
+#sP{background:radial-gradient(circle at 50% 0%,#155a7c,#06202e);justify-content:flex-start;padding-top:6vmin;overflow:auto}
+#sP h2{font-size:clamp(28px,6vmin,72px);margin-bottom:3vmin}
+.passes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:2.4vmin;width:100%;max-width:1400px}
+.pass{background:#fff;color:#1d2a33;border-radius:2vmin;display:grid;grid-template-columns:1fr auto;overflow:hidden;text-align:left;opacity:0;transform:rotateX(90deg);transform-origin:top}
+#sP.on .pass{animation:flip .8s cubic-bezier(.2,.9,.3,1.2) forwards}
+@keyframes flip{to{opacity:1;transform:none}}
+.pass .l{padding:1.8vmin 2.2vmin;border-right:2px dashed #d9dee2}
+.pass .air{font-size:11px;letter-spacing:.14em;color:var(--coral);font-weight:800}
+.pass .nm{font-family:Fraunces,serif;font-size:clamp(20px,3vmin,32px);margin:.6vmin 0}
+.pass .rt{display:flex;align-items:center;gap:10px;font-weight:800;font-size:clamp(18px,2.6vmin,28px);color:var(--ocean)}
+.pass .rt i{flex:1;height:2px;background:repeating-linear-gradient(90deg,#c9d3d9 0 6px,transparent 6px 10px);position:relative}
+.pass .meta{display:flex;gap:14px;font-size:12px;color:#5d6b75;margin-top:.8vmin}
+.pass .meta b{display:block;color:#1d2a33;font-size:14px}
+.pass .r{padding:1.4vmin;display:grid;place-items:center;background:#f6f1e7}
+.pass .r svg{width:min(18vmin,110px);height:auto}
+
+/* final */
+#sF{background:linear-gradient(160deg,#F26B5B,#F6C343 45%,#1FB5B0)}
+#sF h2{font-size:clamp(44px,11vmin,140px);color:#fff;text-shadow:0 1vmin 3vmin rgba(0,0,0,.2)}
+#sF p{font-size:clamp(18px,3.4vmin,40px);font-weight:700;color:var(--ocean)}
+#sF .qr{background:#fff;border-radius:2.4vmin;padding:2vmin;margin-top:3vmin;display:inline-block}
+#sF .qr svg{width:min(28vmin,240px);height:auto;display:block}
+#sF .cd{display:flex;gap:2vmin;justify-content:center;margin-top:2vmin}
+#sF .cd div{background:rgba(255,255,255,.35);border-radius:2vmin;padding:1.4vmin 2.4vmin;color:var(--ocean)}
+#sF .cd b{display:block;font-family:Fraunces,serif;font-size:clamp(26px,5vmin,60px)}
+</style>
+</head>
+<body>
+<div id="bar"></div>
+<button id="fs">⛶ Pantalla completa</button>
+
+<section class="slide on" id="s0"><h2>Familia, tenemos algo que contarles…</h2><div class="btn">Toca para empezar</div></section>
+<section class="slide" id="s1"><div class="type" id="type"></div></section>
+<section class="slide" id="s2"><canvas id="conf"></canvas><div class="big" id="big"></div><div class="sub">6 al 10 de diciembre de 2026 · 🇨🇼</div>
+ <div class="facades"><span style="background:#F26B5B;height:70%"></span><span style="background:#F6C343;height:92%"></span><span style="background:#1FB5B0;height:62%"></span><span style="background:#9B8BD6;height:84%"></span><span style="background:#7FD1AE;height:68%"></span><span style="background:#F48FB1;height:96%"></span><span style="background:#F6C343;height:58%"></span><span style="background:#1FB5B0;height:80%"></span><span style="background:#F26B5B;height:66%"></span><span style="background:#9B8BD6;height:88%"></span><span style="background:#7FD1AE;height:60%"></span></div></section>
+<section class="slide" id="s3"><div id="fmap"></div><div class="cap"><b>✈️ Bogotá → Curazao</b><span>Avianca · domingo 6 de diciembre · 7:30 a.m. → 10:30 a.m. · 2 horas</span></div></section>
+<section class="slide" id="s4"><div class="bg"></div><div class="ov"><div style="font-size:clamp(14px,2.6vmin,28px);letter-spacing:.2em;font-weight:700">NUESTRA CASA POR 4 NOCHES</div><h2>Dreams Curaçao</h2><div class="chips"><span>🍹 Todo incluido 24 h</span><span>🏊 Piscina y jacuzzi frente al mar</span><span>🍝 3 restaurantes a la carta</span><span>🍸 Bares y discoteca</span><span>🏰 Un fuerte del siglo XVIII</span><span>🏖️ Playa privada</span></div></div></section>
+<div id="daySlides"></div>
+<section class="slide" id="sP"><h2>Sus pases de abordar 🎫</h2><div class="passes" id="passes"></div></section>
+<section class="slide" id="sF"><h2>Bon bini na Kòrsou!</h2><p>Escaneen para ver el itinerario completo</p><div class="qr" id="qrBig"></div><div class="cd" id="cd"></div></section>
+<div class="hint" id="hint">Toca la pantalla o usa ➡️ para avanzar</div>
+
+<script src="lib/maplibre-gl.js"></script>
+<script src="lib/qrcode.js"></script>
+<script src="data.js"></script>
+<script>
+/* ====== CONFIGURA AQUÍ LOS NOMBRES (o ábrelo con ?n=Nombre1,Nombre2,...) ====== */
+let NAMES=['Jeffry','Juliette','Juan Esteban','William','Leila','Karina','Maryluz','Esmeralda'];
+const SEATS=['12A','12B','14A','14B','14C','16A','16B','16C']; // por habitación
+const qp=new URLSearchParams(location.search).get('n'); if(qp)NAMES=qp.split(',').map(s=>s.trim()).filter(Boolean);
+const SITE=location.protocol.startsWith('http')?location.href.replace(/presentacion\.html.*$/,''):'https://jeffry0902.github.io/dushi-trip/';
+
+const DAYSLIDES=[
+ {k:'Domingo 6',t:'Llegada y todo incluido',c:'#1FB5B0',img:'img/worldcafe.jpg',li:['✈️ Vuelo directo de 2 horas','🍹 Piscina, playa y cócteles','🍝 Cena italiana en Portofino']},
+ {k:'Lunes 7',t:'Cuevas, manglares y Willemstad de noche',c:'#F26B5B',img:'img/hato-cueva.jpg',li:['🦇 Cuevas de Hato','🦤 Safari de avestruces','🛶 Kayak entre manglares','🌉 Puente flotante y luces navideñas']},
+ {k:'Martes 8',t:'Playas del oeste',c:'#0FA3B1',emo:'🐢',li:['🌊 Shete Boka','🐢 Nadar con tortugas en Piskado','🏝️ Kenepa Grandi y Cas Abao','🦩 Flamencos al atardecer']},
+ {k:'Miércoles 9',t:'Historia de día, rumba de noche',c:'#7C6BD0',img:'img/oceana.jpg',li:['🚶 Walking tour por Punda y Otrobanda','🍸 La destilería del Blue Curaçao','🦞 Cena en Oceana','💃 Noche de fiesta en Mambo Beach']},
+ {k:'Jueves 10',t:'Último día de piscina',c:'#3FB984',img:'img/barefoot.jpg',li:['🌴 Última mañana de playa','📸 Fotos finales','🇨🇴 Regreso a casa']}
+];
+
+/* ====== construir ====== */
+'CURAÇAO'.split('').forEach((ch,i)=>{const s=document.createElement('span');s.textContent=ch;s.style.animationDelay=(0.12*i)+'s';s.style.color=['#F6C343','#fff','#F26B5B','#1FB5B0','#fff','#F6C343','#7FD1AE'][i];document.getElementById('big').appendChild(s)});
+document.querySelectorAll('#s2 .facades span').forEach((s,i)=>s.style.animationDelay=(0.6+0.07*i)+'s');
+document.getElementById('daySlides').outerHTML=DAYSLIDES.map((d,i)=>`<section class="slide day" style="--c:${d.c}"><div class="wrap"><div><div class="k">${d.k}</div><h2>${d.t}</h2><ul>${d.li.map((l,j)=>`<li style="animation-delay:${0.5+j*0.35}s">${l}</li>`).join('')}</ul></div><div class="pic">${d.img?`<img src="${d.img}" alt="">`:d.emo}</div></div></section>`).join('');
+function qrSvg(text,cell){const q=qrcode(0,'M');q.addData(text);q.make();return q.createSvgTag({cellSize:cell,margin:1,scalable:true})}
+const qr=qrSvg(SITE,4);
+document.getElementById('passes').innerHTML=NAMES.map((n,i)=>`<div class="pass" style="animation-delay:${0.3+i*0.25}s"><div class="l"><div class="air">DUSHI AIR · PASE DE ABORDAR</div><div class="nm">${n}</div><div class="rt">BOG <i></i> ✈ <i></i> CUR</div><div class="meta"><span>Fecha<b>06 DIC</b></span><span>Hora<b>07:30</b></span><span>Asiento<b>${SEATS[i]||'—'}</b></span><span>Clase<b>Dushi</b></span></div></div><div class="r">${qr}</div></div>`).join('');
+document.getElementById('qrBig').innerHTML=qrSvg(SITE,6);
+
+/* ====== navegación ====== */
+const slides=[...document.querySelectorAll('.slide')];let cur=0;
+function go(i){if(i<0||i>=slides.length)return;slides[cur].classList.remove('on');cur=i;slides[cur].classList.add('on');
+ document.getElementById('bar').style.width=(cur/(slides.length-1)*100)+'%';
+ document.getElementById('hint').style.display=cur===slides.length-1?'none':'';
+ const id=slides[cur].id; if(id==='s1')typeIt(); if(id==='s2')confetti(); if(id==='s3')flight();}
+document.addEventListener('click',e=>{if(e.target.id==='fs')return;go(cur+1)});
+document.addEventListener('keydown',e=>{if(['ArrowRight',' ','Enter','PageDown'].includes(e.key)){e.preventDefault();go(cur+1)}if(['ArrowLeft','PageUp'].includes(e.key))go(cur-1)});
+document.getElementById('fs').onclick=()=>{const d=document.documentElement;(d.requestFullscreen||d.webkitRequestFullscreen||(()=>{})).call(d)};
+
+/* ====== 1: máquina de escribir ====== */
+let typing=0;
+async function typeIt(){const my=++typing;const el=document.getElementById('type');
+ const lines=['Este diciembre…','8 personas.','5 días.','1 isla del Caribe.','¿Adivinan cuál?'];
+ for(const l of lines){el.textContent='';for(const ch of l){if(my!==typing)return;el.textContent+=ch;await new Promise(r=>setTimeout(r,70))}await new Promise(r=>setTimeout(r,900))}}
+
+/* ====== 2: confeti ====== */
+function confetti(){const cv=document.getElementById('conf'),ctx=cv.getContext('2d');cv.width=innerWidth;cv.height=innerHeight;
+ const C=['#F6C343','#F26B5B','#1FB5B0','#7FD1AE','#9B8BD6','#fff'];const P=Array.from({length:180},()=>({x:Math.random()*cv.width,y:-20-Math.random()*cv.height*.6,vx:(Math.random()-.5)*3,vy:2+Math.random()*4,r:4+Math.random()*6,c:C[Math.floor(Math.random()*C.length)],a:Math.random()*6}));
+ const t0=performance.now();(function f(t){ctx.clearRect(0,0,cv.width,cv.height);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.a+=.1;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.a);ctx.fillStyle=p.c;ctx.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);ctx.restore()});if(t-t0<6000&&slides[cur].id==='s2')requestAnimationFrame(f);else ctx.clearRect(0,0,cv.width,cv.height)})(t0)}
+
+/* ====== 3: vuelo animado ====== */
+let fmap=null;
+function flight(){const A=PLACES.bog.ll,B=PLACES.cur.ll;
+ const pts=[];for(let i=0;i<=160;i++){const t=i/160;pts.push([A[0]+(B[0]-A[0])*t,A[1]+(B[1]-A[1])*t+Math.sin(Math.PI*t)*1.6])}
+ const start=()=>{fmap.getSource('arc').setData({type:'Feature',geometry:{type:'LineString',coordinates:[A]}});const t0=performance.now();const D=6000;
+  (function f(t){const k=Math.min(1,(t-t0)/D);const e=k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;const n=Math.max(1,Math.round(e*160));const seg=pts.slice(0,n+1);
+   fmap.getSource('arc').setData({type:'Feature',geometry:{type:'LineString',coordinates:seg}});fmap.getSource('plane').setData({type:'Feature',geometry:{type:'Point',coordinates:seg[seg.length-1]}});
+   if(k<1&&slides[cur].id==='s3')requestAnimationFrame(f);else if(k>=1)fmap.flyTo({center:B,zoom:9.5,duration:3500,essential:true})})(t0)};
+ if(fmap){fmap.jumpTo({center:[-71.5,8.6],zoom:4.6});start();return}
+ fmap=new maplibregl.Map({container:'fmap',style:'https://tiles.openfreemap.org/styles/liberty',center:[-71.5,8.6],zoom:4.6,interactive:false,attributionControl:{compact:true}});
+ fmap.on('load',()=>{
+  fmap.addSource('arc',{type:'geojson',data:{type:'Feature',geometry:{type:'LineString',coordinates:[A]}}});
+  fmap.addSource('plane',{type:'geojson',data:{type:'Feature',geometry:{type:'Point',coordinates:A}}});
+  fmap.addSource('ends',{type:'geojson',data:{type:'FeatureCollection',features:[A,B].map((c,i)=>({type:'Feature',properties:{n:i?'Curazao':'Bogotá'},geometry:{type:'Point',coordinates:c}}))}});
+  fmap.addLayer({id:'arcC',type:'line',source:'arc',paint:{'line-color':'#fff','line-width':9},layout:{'line-cap':'round'}});
+  fmap.addLayer({id:'arc',type:'line',source:'arc',paint:{'line-color':'#F26B5B','line-width':5},layout:{'line-cap':'round'}});
+  fmap.addLayer({id:'ends',type:'circle',source:'ends',paint:{'circle-radius':10,'circle-color':'#0E3B53','circle-stroke-color':'#fff','circle-stroke-width':3}});
+  fmap.addLayer({id:'endsT',type:'symbol',source:'ends',layout:{'text-field':['get','n'],'text-font':['Noto Sans Bold'],'text-size':20,'text-offset':[0,1.4],'text-anchor':'top'},paint:{'text-color':'#0E3B53','text-halo-color':'#fff','text-halo-width':2.5}});
+  fmap.addLayer({id:'plane',type:'circle',source:'plane',paint:{'circle-radius':12,'circle-color':'#F6C343','circle-stroke-color':'#0E3B53','circle-stroke-width':4}});
+  start()});
+}
+
+/* ====== cuenta regresiva final ====== */
+(function(){const el=document.getElementById('cd');const T=new Date('2026-12-06T07:30:00-05:00').getTime();
+ function tick(){const d=T-Date.now();if(d<=0){el.innerHTML='<div><b>¡Hoy!</b></div>';return}
+  el.innerHTML=`<div><b>${Math.floor(d/864e5)}</b>días</div><div><b>${Math.floor(d%864e5/36e5)}</b>horas</div><div><b>${Math.floor(d%36e5/6e4)}</b>min</div>`}
+ tick();setInterval(tick,30000)})();
+</script>
+</body>
+</html>
