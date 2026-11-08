@@ -118,8 +118,46 @@ section.view.on{display:block;animation:fade .25s ease}
 .ttbox{margin-top:10px}
 .ttbox iframe{width:100%;max-width:340px;aspect-ratio:9/16;border:0;border-radius:14px;display:block;margin:0 auto;background:#000}
 .routebtn{display:inline-block;margin-top:12px;background:#fff;color:var(--day);font-weight:700;text-decoration:none;padding:8px 14px;border-radius:999px;font-size:14px}
-.herobtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.herobtns a{background:var(--sun);color:var(--ocean);font-weight:700;text-decoration:none;padding:9px 14px;border-radius:999px;font-size:14px}
+.hrow{display:flex;gap:10px;align-items:stretch;margin-top:18px}
+.hrow .count{margin-top:0}
+.bigroute{flex:1;min-width:0;display:flex;gap:10px;align-items:center;background:var(--sun);color:var(--ocean);border-radius:16px;padding:10px 12px;text-decoration:none;box-shadow:0 0 0 0 rgba(246,195,67,.7);animation:glow 2s infinite}
+.bigroute .br-i{font-size:30px}
+.bigroute b{display:block;font-size:16px;line-height:1.15}
+.bigroute small{display:block;font-size:12px;font-weight:500;opacity:.85;line-height:1.25;margin-top:2px}
+@keyframes glow{0%{box-shadow:0 0 0 0 rgba(246,195,67,.65)}70%{box-shadow:0 0 0 12px rgba(246,195,67,0)}100%{box-shadow:0 0 0 0 rgba(246,195,67,0)}}
+@media(max-width:400px){.count div{min-width:52px;padding:8px 6px}.bigroute small{display:none}}
+.howto{display:flex;gap:10px;align-items:flex-start;background:#fff8d6;box-shadow:0 0 0 1px #f3e2a9;border-radius:16px;padding:12px 14px;margin-top:12px;font-size:15px}
+.howto>span{font-size:24px;line-height:1}
+.pick{margin-top:12px;border-radius:14px;padding:10px 12px;background:#fff4e5;box-shadow:0 0 0 2px #f6c343}
+.pick.pend{animation:pulseb 2.2s infinite}
+@keyframes pulseb{50%{box-shadow:0 0 0 4px rgba(246,195,67,.55)}}
+.pick.si{background:#e7f6ec;box-shadow:0 0 0 2px #3FB984}
+.pick.no{background:#f3f4f5;box-shadow:0 0 0 1px #d6dbe0}
+.pq{font-size:14.5px;color:#33434d}
+.pv{display:block;font-weight:700;color:#a8362a;font-size:13px;margin-bottom:2px}
+.pp{white-space:nowrap;font-weight:700;color:#1d6b3d}
+.pb{display:flex;gap:8px;margin-top:8px}
+.pb button{flex:1;border:0;border-radius:12px;padding:11px 6px;font:700 15px Outfit,sans-serif;cursor:pointer;background:#fff;box-shadow:0 0 0 1px #d6dbe0;color:#33434d}
+.pick.si .pb button[data-v=si]{background:#3FB984;color:#fff;box-shadow:none}
+.pick.no .pb button[data-v=no]{background:#5d6b75;color:#fff;box-shadow:none}
+.st.party .pick{color:#33434d}
+.bigbtn{display:block;text-align:center;margin-top:10px;background:var(--ocean);color:#fff!important;text-decoration:none;font-weight:700;font-size:16px;padding:13px;border-radius:14px}
+.inv{background:#eaf7f6;box-shadow:0 0 0 1px #c6e9e6;border-radius:14px;padding:10px 12px;font-size:14.5px;margin:10px 0}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px}
+.legend button{display:flex;gap:8px;align-items:center;text-align:left;border:0;background:#fff;box-shadow:0 0 0 1px var(--line);border-radius:10px;padding:7px 8px;font:500 13px Outfit,sans-serif;color:var(--ink);cursor:pointer}
+.legend button i{flex:0 0 auto;width:22px;height:22px;border-radius:50%;background:var(--pc);color:#fff;font:700 11px Outfit,sans-serif;font-style:normal;display:grid;place-items:center}
+.legend button.nog{color:#8a959d}
+.step{display:flex;gap:12px;align-items:flex-start;background:#fff;border-radius:16px;padding:14px;box-shadow:0 0 0 1px var(--line);margin-bottom:10px}
+.step .n{flex:0 0 auto;width:34px;height:34px;border-radius:50%;background:var(--coral);color:#fff;font-weight:800;display:grid;place-items:center;font-size:17px}
+.step b{display:block;font-size:16px}
+.step p{margin:2px 0 0;color:#33434d;font-size:14.5px}
+.who{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
+.who button{border:0;border-radius:12px;padding:12px;font:700 15px Outfit,sans-serif;background:#fff;box-shadow:0 0 0 1px var(--line);cursor:pointer}
+.who button.on{background:var(--sea);color:#fff;box-shadow:none}
+.prog{height:10px;border-radius:10px;background:#ece3d4;overflow:hidden;margin:8px 0}
+.prog i{display:block;height:100%;background:var(--mint);transition:width .4s}
+.wa{display:block;width:100%;border:0;border-radius:14px;padding:15px;font:800 17px Outfit,sans-serif;background:#25D366;color:#fff;cursor:pointer;margin-top:10px}
+.pend-list a{display:block;padding:8px 0;border-bottom:1px dashed var(--line);text-decoration:none;font-weight:600}
 .card.kit{grid-column:1/-1;background:#e9f6ff;box-shadow:0 0 0 1px #bfe0f5}
 .rest{display:grid;grid-template-columns:96px 1fr;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
 .rest img{width:96px;height:72px;object-fit:cover;border-radius:10px}
@@ -191,8 +229,7 @@ th{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--mute
     <span class="flag">🇨🇼 Familia · 6 al 10 dic 2026</span>
     <h1>Dushi Trip<br><em>Curaçao</em></h1>
     <p>Hotel Dreams Curaçao · Todo incluido · 8 viajeros</p>
-    <div class="count" id="count" aria-live="polite"></div>
-    <div class="herobtns"><a href="ruta.html">🗺️ Rutas animadas</a><a href="presentacion.html">🎬 Presentación</a></div>
+    <div class="hrow"><div class="count" id="count" aria-live="polite"></div><a class="bigroute" href="ruta.html"><span class="br-i">🗺️</span><span><b>Ver las rutas animadas</b><small>Toca aquí y mira el viaje como en Google Maps</small></span></a></div>
   </div>
   <div class="facades" aria-hidden="true">
     <span style="background:#F26B5B;height:52px"></span><span style="background:#F6C343;height:64px"></span><span style="background:#1FB5B0;height:46px"></span><span style="background:#9B8BD6;height:60px"></span><span style="background:#7FD1AE;height:50px"></span><span style="background:#F48FB1;height:66px"></span><span style="background:#F6C343;height:44px"></span><span style="background:#1FB5B0;height:58px"></span><span style="background:#F26B5B;height:48px"></span>
@@ -214,20 +251,20 @@ const esc=s=>s;
 const DAYS=[
 {
  id:'dom', tab:'Dom 6', sub:'Llegada', color:'#1FB5B0', emo:'✈️',
- kicker:'Domingo 6 de diciembre', title:'Llegada dushi', intro:'Bogotá → Curazao. Día de reconocer el hotel, descansar y estrenar el todo incluido.',
+ note:'Hoy no hay que elegir nada: es día de viaje y de hotel para todos. 👉 Toca <b>▶ Ver video</b> para conocer el hotel y <b>🎧 Escuchar al guía</b>.',kicker:'Domingo 6 de diciembre', title:'Llegada dushi', intro:'Bogotá → Curazao. Día de reconocer el hotel, descansar y estrenar el todo incluido.',
  outfit:['Viaje: ropa fresca y cómoda, tenis.','En la maleta de mano, arriba: vestido de baño, chanclas y bloqueador (máx. 100 ml).','Cena en Portofino (casual elegante): hombres con pantalón largo y camisa; mujeres con vestido o conjunto.'],
- meals:[['Desayuno','Algo ligero en El Dorado o en el avión'],['Almuerzo','World Café (buffet) · 12:30 p.m.'],['Cena','🍝 Portofino (italiano) · 6:00 p.m.']],
- money:{base:'US$0',txt:'Todo está incluido. Lleven US$10–20 en billetes de 1 y 5 para propinas.'},
+ meals:[['Desayuno','En El Dorado, después de migración (lleven plata para eso)'],['Almuerzo','World Café (buffet) · 12:30 p.m.'],['Cena','🍝 Portofino (italiano) · 6:00 p.m.']],
+ money:{base:'≈ US$23',txt:'Transporte al aeropuerto (≈ US$8) y desayuno en El Dorado (≈ US$15). En Curazao todo está incluido. Lleven también US$10–20 en billetes de 1 y 5 para propinas.'},
  tips:['Adelanten el reloj 1 hora: Curazao va una hora adelante de Colombia.','Tengan la DI Card en PDF en el celular (y una copia impresa).','Sin maleta en bodega se sale rapidísimo del aeropuerto.'],
  steps:[
-  {t:'3:45',s:'a.m.',h:'Salida hacia el aeropuerto El Dorado',d:'Calculen el tiempo desde donde duerman. Es un vuelo internacional.'},
-  {t:'4:30',s:'a.m.',h:'Llegada a El Dorado · Terminal 1, internacional',w:'Aeropuerto El Dorado, Bogotá',d:'Hagan el check-in web de Avianca el día antes (solo llevan equipaje de mano). Luego pasan por Migración Colombia con el pasaporte. Revisen que nadie lleve líquidos de más de 100 ml.'},
+  {t:'3:45',s:'a.m.',h:'Salida hacia el aeropuerto El Dorado',d:'Calculen el tiempo desde donde duerman. Es un vuelo internacional. Alisten la plata del transporte (taxi o van entre varios).',cost:{id:'transp_bog',usd:8,label:'Transporte al aeropuerto El Dorado (aprox.)',base:1}},
+  {t:'4:30',s:'a.m.',h:'Llegada a El Dorado · Terminal 1, internacional',w:'Aeropuerto El Dorado, Bogotá',d:'Hagan el check-in web de Avianca el día antes (solo llevan equipaje de mano). Luego pasan por Migración Colombia con el pasaporte. Revisen que nadie lleve líquidos de más de 100 ml. <b>Desayuno:</b> después de migración, en la zona de salas; un desayuno cuesta unos $40.000 a $60.000 pesos. Lleven plata para eso.',cost:{id:'comida_bog',usd:15,label:'Comida en el aeropuerto El Dorado',base:1}},
   {t:'7:30',s:'a.m.',h:'Vuelo Avianca Bogotá → Curazao',d:'Dura unas 2 horas. El vuelo de las 7:30 a.m. aparece como AV92: confirmen el número en su reserva.',tags:[['Incluido','p']]},
   {t:'10:30',s:'a.m.',h:'Llegada al aeropuerto de Curazao (CUR)',w:'Hora de Curazao',d:'Pasan por inmigración con el pasaporte y la DI Card, y luego por aduana. A la salida los espera el traslado incluido.'},
   {t:'11:15',s:'a.m.',h:'Traslado al hotel',d:'Son unos 15 minutos hasta la bahía de Piscadera.',tags:[['Incluido','p']]},
   {t:'11:45',s:'a.m.',h:'Llegada al Dreams Curaçao · registro y manillas',g:'hotel',tt:'hotel',img:'img/resort.jpg',w:'Lobby',map:'Dreams Curaçao Resort Spa & Casino',d:'Las habitaciones se entregan a las 3:00 p.m. En recepción pregunten:<ul><li>los horarios de los restaurantes de la semana (el buffet de la noche funciona por rotación);</li><li>la programación de shows;</li><li>si prestan toallas de playa para salir del hotel;</li><li>si dan lunch box para el martes;</li></ul>'},
   {t:'12:30',s:'p.m.',h:'Almuerzo · World Café (buffet)',img:'img/worldcafe.jpg',cls:'meal-st',d:'El almuerzo va de 12:30 a 3:30. Si alguien quiere algo rápido, el Barefoot Grill de la piscina tiene hamburguesas y perros hasta las 5 p.m.'},
-  {t:'1:30',s:'p.m.',h:'Recorrido por el hotel',d2:'<a href="#" onclick="show(\'hotel\');return false">🗺️ Ver el mapa interactivo del hotel</a>',gal:[['img/hideaway.jpg','Hideaway · bar de playa'],['img/rendezvous.jpg','Rendezvous · lobby bar'],['img/barefoot.jpg','Barefoot Grill'],['img/cococafe.jpg','Coco Café']],d:'Conozcan la piscina principal, el jacuzzi, la playa de Piscadera, el fuerte colonial del siglo XVIII que está dentro del hotel, los bares <b>Hideaway</b> (playa) y <b>Rendezvous</b> (lobby), el Coco Café, el casino y <b>Desires</b>, la discoteca del hotel (6 p.m. a 1 a.m.).'},
+  {t:'1:30',s:'p.m.',h:'Recorrido por el hotel',d3:'<a class="bigbtn" href="#" onclick="show(\'hotel\');return false">🗺️ Toca aquí: mapa interactivo del hotel</a>',gal:[['img/hideaway.jpg','Hideaway · bar de playa'],['img/rendezvous.jpg','Rendezvous · lobby bar'],['img/barefoot.jpg','Barefoot Grill'],['img/cococafe.jpg','Coco Café']],d:'Conozcan la piscina principal, el jacuzzi, la playa de Piscadera, el fuerte colonial del siglo XVIII que está dentro del hotel, los bares <b>Hideaway</b> (playa) y <b>Rendezvous</b> (lobby), el Coco Café, el casino y <b>Desires</b>, la discoteca del hotel (6 p.m. a 1 a.m.).'},
   {t:'3:00',s:'p.m.',h:'Entrega de habitaciones',d:'Desempaquen y cuelguen de una vez la ropa de las cenas a la carta.'},
   {t:'3:30',s:'p.m.',h:'Piscina, playa y primeros cócteles 🍹'},
   {t:'5:15',s:'p.m.',h:'Brindis de bienvenida y foto familiar en la playa',d:'El atardecer es hacia las 6:15. Esta es la primera foto del álbum del viaje.'},
@@ -237,26 +274,26 @@ const DAYS=[
 },
 {
  id:'lun', tab:'Lun 7', sub:'Cuevas + ciudad', color:'#F26B5B', emo:'🌆',
- kicker:'Lunes 7 de diciembre', title:'Cuevas, manglares y Willemstad de noche', intro:'Todos juntos: Cuevas de Hato y granja de avestruces en la mañana, almuerzo en el hotel, kayak entre los manglares y la ciudad con las luces navideñas.',
+ note:'Todas las actividades de hoy son <b>opcionales</b>. En cada una: 1) toca <b>▶ Ver video</b> para saber cómo es, 2) marca <b>✅ Voy</b> o <b>❌ No voy</b>. Así sabemos con quién contamos y reservamos a tiempo.',kicker:'Lunes 7 de diciembre', title:'Cuevas, manglares y Willemstad de noche', intro:'Todos juntos: Cuevas de Hato y granja de avestruces en la mañana, almuerzo en el hotel, kayak entre los manglares y la ciudad con las luces navideñas.',
  outfit:['Mañana: ropa fresca y tenis (las cuevas son húmedas y tienen escalones; en la granja hay polvo).','Tarde y noche: ropa clara y colorida para las fotos, sandalias o tenis cómodos (hay adoquines y un puente flotante) y un abanico. Ver el ejemplo de la 1:45 p.m.','Cena en el buffet: casual.'],
  meals:[['Desayuno','World Café · 7:30 a.m.'],['Almuerzo','World Café · 1:00 p.m.'],['Cena','Buffet World Café · 8:15 p.m. (casual, abierto hasta las 10:30)']],
- money:{base:'≈ US$94',txt:'Carro y gasolina de los 3 días ≈ US$41, Cuevas de Hato US$10, avestruces US$17, kayak US$25 y parqueo. Aquafari, Cascada e Iguana Ride son opcionales.'},
+ money:{base:'≈ US$42',txt:'Carro y gasolina de los 3 días (≈ US$41) y parqueo. Además, lo que elijan: Cuevas de Hato US$10, avestruces US$17, kayak US$25, Aquafari US$139, Cascada o Iguana Ride.'},
  tips:['Lleven un candado marcado desde Colombia para el cañón de los candados.','El parqueo en Punda y Otrobanda se paga: lleven efectivo, ojalá en florines (aprox. 1 Cg la hora). En la calle también se puede pagar con la app Flowbird.','Celular cargado y una batería externa.','Lleven repelente: en el manglar hay mosquitos.'],
  steps:[
   {t:'7:30',s:'a.m.',h:'Desayuno · World Café',cls:'meal-st'},
   {t:'8:15',s:'a.m.',h:'Entrega de los 2 carros en el hotel',d:'Cada carro cuesta <b>US$145 por los 3 días</b> (lunes a miércoles), más la gasolina. Entre 4 personas por carro sale a unos <b>US$36 por persona</b>, más unos US$5 de gasolina. Los conductores necesitan licencia vigente, pasaporte y tarjeta de crédito.',tags:[['≈ US$41 c/u','p']],cost:{id:'carros',usd:41,label:'Carro 3 días + gasolina (US$145 ÷ 4 + gasolina)',base:1}},
   {t:'8:40',s:'a.m.',h:'Salida hacia las Cuevas de Hato',d:'Unos 10 minutos desde el hotel, cerca del aeropuerto.'},
-  {t:'9:00',s:'a.m.',h:'Cuevas de Hato',g:'hato',tt:'hato',img:'img/hato-entrada.jpg',map:'Hato Caves Curaçao',w:'Franklin D. Rooseveltweg · abierto todos los días de 9 a.m. a 3 p.m.',d:'Cuevas de coral de miles de años, con estalactitas, pozos y la figura de la Virgen. El tour guiado sale cada hora en punto (el primero a las 9:00) y es en inglés. <b>Para tenerlo en español hay que pedirlo por WhatsApp: +599 9 523 3353.</b> La entrada incluye el tour de la cueva y los senderos del parque. Tiene unos 50 escalones.',tags:[['Todos','g'],['US$10 adulto (Nafl 17,50)','p']],cost:{id:'hato',usd:10,label:'Cuevas de Hato',base:1}},
+  {t:'9:00',s:'a.m.',h:'Cuevas de Hato',g:'hato',tt:'hato',img:'img/hato-entrada.jpg',map:'Hato Caves Curaçao',w:'Franklin D. Rooseveltweg · abierto todos los días de 9 a.m. a 3 p.m.',d:'Cuevas de coral de miles de años, con estalactitas, pozos y la figura de la Virgen. El tour guiado sale cada hora en punto (el primero a las 9:00) y es en inglés. <b>Para tenerlo en español hay que pedirlo por WhatsApp: +599 9 523 3353.</b> La entrada incluye el tour de la cueva y los senderos del parque. Tiene unos 50 escalones.',tags:[['Opcional','o'],['US$10 adulto (Nafl 17,50)','p']],cost:{id:'hato',usd:10,label:'Cuevas de Hato'}},
   {t:'10:15',s:'a.m.',h:'Salida hacia la granja de avestruces',d:'Unos 35 minutos hacia el oriente de la isla.'},
-  {t:'11:00',s:'a.m.',h:'Granja de avestruces (Ostrich Farm)',g:'avestruz',tt:'avestruz',map:'Curaçao Ostrich Farm',w:'Groot St. Joris · tours cada hora de 9 a.m. a 4 p.m.',d:'Recorrido en camión safari: les dan de comer a las avestruces en la mano, pueden pararse encima de un huevo y ven todo el ciclo, del huevo al ave adulta. Dura cerca de 1 hora.',tags:[['Todos','g'],['US$17','p']],cost:{id:'avestruz',usd:17,label:'Granja de avestruces',base:1}},
+  {t:'11:00',s:'a.m.',h:'Granja de avestruces (Ostrich Farm)',g:'avestruz',tt:'avestruz',map:'Curaçao Ostrich Farm',w:'Groot St. Joris · tours cada hora de 9 a.m. a 4 p.m.',d:'Recorrido en camión safari: les dan de comer a las avestruces en la mano, pueden pararse encima de un huevo y ven todo el ciclo, del huevo al ave adulta. Dura cerca de 1 hora.',tags:[['Opcional','o'],['US$17','p']],cost:{id:'avestruz',usd:17,label:'Granja de avestruces'}},
   {t:'12:15',s:'p.m.',h:'Regreso al hotel'},
   {t:'12:50',s:'p.m.',h:'Almuerzo · World Café',cls:'meal-st'},
   {t:'1:10',s:'p.m.',h:'Aquafari · solo para quien se anime',g:'aquafari',tt:'aquafari',opt:1,w:'Boka Sami · Redaweg 8B, Sint Michiel (~15 min)',map:'Aquafari Curaçao Redaweg 8B Sint Michiel',d:'Los que van salen en un solo carro después de almorzar. Turno de <b>1:30 a 2:30 p.m.</b> Es un scooter bajo el agua con una cúpula de aire: respiran normal y no hay que saber bucear. Edad mínima: 10 años. <b>Hay que reservar.</b> Al terminar siguen directo al Mangrove Park (unos 15 min) y se encuentran con el grupo a las 3:00.<br><i>Otros turnos libres: lunes 11:00 y 2:45; martes 9:30, 11:00 y 2:45.</i>',tags:[['Opcional','o'],['US$139','p']],cost:{id:'aquafari',usd:139,label:'Aquafari'},cost2:{id:'aquafari_fotos',usd:15,label:'Fotos Aquafari'}},
   {t:'1:45',s:'p.m.',h:'Ducha y outfit de la tarde 👕👗',d:'<b>¿Para dónde vamos?</b> Kayak entre los manglares y después a caminar Otrobanda, Punda y Pietermaai hasta las 8 p.m. Va a haber sol, brisa, adoquines y muchas fotos.<br><b>Ejemplo hombres:</b> bermuda de lino o short de color claro, camisa de botones fresca (blanca, celeste o estampada), tenis blancos o sandalias con tira, gorra o sombrero.<br><b>Ejemplo mujeres:</b> vestido fresco de colores o short con blusa ligera, sandalias planas y cómodas (nada de tacones: hay adoquines y un puente flotante), sombrero y gafas.<br><b>En el morral:</b> bloqueador, repelente (para el manglar), agua, abanico, batería externa, el candado y florines para el parqueo y el helado.'},
   {t:'2:40',s:'p.m.',h:'Salida hacia Otrobanda y parqueo',map:'Curaçao Rif Mangrove Park',w:'Curaçao Rif Mangrove Park · ~15 min',d:'Parqueen cerca del Mangrove Park o del Rif Fort: el carro se queda allí toda la tarde. <b>Hay que pagar parqueadero:</b> lleven efectivo, ojalá en florines (aprox. 1 Cg la hora).',cost:{id:'parqueo_lun',usd:1,label:'Parqueo lunes (parte de cada uno)',base:1}},
-  {t:'3:00',s:'p.m.',h:'Kayak guiado por los manglares 🛶',g:'mangrove',tt:'mangrove',map:'Curaçao Rif Mangrove Park',d:'Un guía los lleva en kayak entre los manglares, con cangrejos y aves, en pleno centro de la ciudad. El agua es tranquila. Se reserva por correo a <b>info@mangrovepark.org</b>: pregunten si tienen turno a las 3:00. El parque abre de 8 a.m. a 5 p.m.',tags:[['Todos','g'],['US$25','p']],cost:{id:'kayak',usd:25,label:'Kayak guiado manglares',base:1}},
-  {t:'4:30',s:'p.m.',h:'Helados de Mina 🍦',g:'mina',map:'Emancipate Yourself from Mental Slavery Curaçao',w:'Frente a la obra "Emancipate Yourself from Mental Slavery" (Giovanni Abath), Otrobanda',d:'Caminando desde el manglar. Helado artesanal local, de unos US$2, y la foto con la escultura. Si quieren otro, Il Gelato queda en Kura Hulanda Village, también en Otrobanda.',cost:{id:'helado_mina',usd:2,label:'Helado de Mina',base:1}},
-  {t:'4:50',s:'p.m.',h:'Rif Fort · subir a la muralla',g:'riffort',map:'Rif Fort Curaçao',d:'Es la foto clásica de las fachadas de colores de Handelskade, del otro lado del agua.'},
+  {t:'3:00',s:'p.m.',h:'Kayak guiado por los manglares 🛶',g:'mangrove',tt:'mangrove',map:'Curaçao Rif Mangrove Park',d:'Un guía los lleva en kayak entre los manglares, con cangrejos y aves, en pleno centro de la ciudad. El agua es tranquila. Se reserva por correo a <b>info@mangrovepark.org</b>: pregunten si tienen turno a las 3:00. El parque abre de 8 a.m. a 5 p.m.',tags:[['Opcional','o'],['US$25','p']],cost:{id:'kayak',usd:25,label:'Kayak guiado manglares'}},
+  {t:'4:30',s:'p.m.',h:'Helados de Mina 🍦',g:'mina',map:'Emancipate Yourself from Mental Slavery Curaçao',w:'Frente a la obra "Emancipate Yourself from Mental Slavery" (Giovanni Abath), Otrobanda',d:'Caminando desde el manglar. Helado artesanal local, de unos US$2, y la foto con la escultura. Si quieren otro, Il Gelato queda en Kura Hulanda Village, también en Otrobanda.',cost:{id:'helado_mina',usd:2,label:'Helado de Mina'}},
+  {t:'4:50',s:'p.m.',h:'Rif Fort · subir a la muralla',g:'riffort',pick:{id:'paseo_willemstad',label:'Paseo por Willemstad (tarde y noche)'},map:'Rif Fort Curaçao',d:'Es la foto clásica de las fachadas de colores de Handelskade, del otro lado del agua.'},
   {t:'5:05',s:'p.m.',h:'Cruzar el Puente Reina Emma 🌉',g:'puente',tt:'willemstad',map:'Queen Emma Bridge Curaçao',d:'Es el puente flotante (la "Swinging Old Lady"). Si lo abren para que pase un barco, crucen en el ferry gratuito.'},
   {t:'5:15',s:'p.m.',h:'Handelskade y el cañón de los candados',g:'handelskade',map:'Handelskade Willemstad',d:'Los corazones de los candados colapsaron en 2025 por el peso, y desde entonces la gente cuelga los candados en el cañón histórico. Allí ponen el suyo y se toman la foto.'},
   {t:'5:30',s:'p.m.',h:'Fuerte Amsterdam',g:'fortams',map:'Fort Amsterdam Curaçao',d:'Es el patio amarillo donde está la sede del gobierno desde 1634, junto a la iglesia del fuerte (Fortkerk).'},
@@ -264,7 +301,7 @@ const DAYS=[
   {t:'6:00',s:'p.m.',h:'Cascada Rooftop · trago con el atardecer',g:'cascada',opt:1,w:'4.º piso del Elements Hotel, Hendrikplein (Punda)',map:'Cascada Rooftop Bar Curaçao',d:'El lunes abre a las 6 p.m. Tiene vista de los techos y del mar. Un cóctel cuesta unos US$12.',tags:[['Opcional','o']],cost:{id:'cascada',usd:12,label:'Cóctel en Cascada'}},
   {t:'6:20',s:'p.m.',h:'Letras CURAÇAO y DUSHI + escultura Chichi',g:'letras',map:'Wilhelminaplein Willemstad Curaçao sign',w:'Wilhelminaplein (Punda)',d:'Foto familiar con las letras iluminadas. "Dushi" en papiamento significa dulce o lindo.'},
   {t:'6:35',s:'p.m.',h:'Pietermaai de noche ✨',g:'pietermaai',tt:'pietermaai',map:'Pietermaai District Willemstad',w:'5 minutos a pie desde las letras',d:'Es para caminar y tomar fotos; tomarse algo es opcional. Sigan estos puntos:<ol><li><a href="'+gm('Nieuwestraat Pietermaai Willemstad')+'" target="_blank" rel="noopener">📍 Calle Nieuwestraat</a>: la calle principal, con mansiones restauradas, terrazas y luces navideñas.</li><li><a href="'+gm('Mundo Bizarro Nieuwestraat 12 Willemstad')+'" target="_blank" rel="noopener">📍 Mundo Bizarro</a> (Nieuwestraat 12): la fachada cubana más fotogénica.</li><li><a href="'+gm('Saint Tropez Ocean Club Pietermaai')+'" target="_blank" rel="noopener">📍 Saint Tropez Ocean Club</a>: terraza sobre el mar para ver la noche.</li></ol>'},
-  {t:'Alt.',s:'6–8 p.m.',h:'Alternativa: Iguana Ride, tour nocturno en scooter eléctrico',tt:'iguana',opt:1,w:'Iguana Ride Curaçao · WhatsApp +599 9 561 1904',map:'Iguana Ride Curaçao',d:'Para quien no quiera caminar: recorrido guiado de 2 horas (entre 6 y 8 p.m.) por Punda, Scharloo, Pietermaai y Otrobanda. Incluye un shot. Mínimo 4 personas. <b>Hay que reservar.</b>',tags:[['Opcional','o']],cost:{id:'iguana',usd:50,label:'Iguana Ride (tour nocturno)'}},
+  {t:'Alt.',s:'',h:'Alternativa: Iguana Ride en scooter eléctrico (de día o de noche)',tt:'iguana',opt:1,w:'Iguana Ride Curaçao · WhatsApp +599 9 561 1904',map:'Iguana Ride Curaçao',d:'Para quien prefiera rodar en vez de caminar: un guía los lleva en scooter eléctrico por Punda, Scharloo, Pietermaai y Otrobanda. No hace falta experiencia; antes les dan una práctica corta. Mínimo 4 personas y <b>hay que reservar</b>. Hay dos opciones:<ul><li><b>De día</b> (2 h, US$50): se puede hacer el lunes en la tarde en lugar del paseo a pie, o el miércoles después del almuerzo.</li><li><b>De noche</b> (6 a 8 p.m., US$50): con las luces navideñas; incluye un shot.</li></ul>',tags:[['Opcional','o']],cost:{id:'iguana_dia',usd:50,label:'Iguana Ride de día'},cost2:{id:'iguana_noche',usd:50,label:'Iguana Ride de noche'}},
   {t:'7:30',s:'p.m.',h:'Recogida del grupo',d:'Los dos conductores caminan hasta los carros (20–25 min, en el Mangrove Park / Rif Fort) o toman un taxi, y recogen a todos en Pietermaai.'},
   {t:'8:15',s:'p.m.',h:'Cena · Buffet World Café',img:'img/worldcafe.jpg',cls:'meal-st',d:'Ropa casual. Abierto hasta las 10:30.'},
   {t:'9:30',s:'p.m.',h:'Noche de hotel',d:'Show, Rendezvous o Desires.'}
@@ -272,7 +309,7 @@ const DAYS=[
 },
 {
  id:'mar', tab:'Mar 8', sub:'Playas', color:'#0FA3B1', emo:'🐢',
- kicker:'Martes 8 de diciembre', kit:['<b>Careta y snorkel propios</b>: alquilarlos allá es caro y no siempre hay. Cómprenlos en Colombia (una careta básica pesa poco).','<b>Zapatos de agua</b> para todos: en Piskado, Kenepa y Cas Abao hay piedras y coral.','<b>Chaleco o flotador</b> para quien no nade bien: así también ven las tortugas sin esfuerzo.','<b>Camiseta con filtro UV</b> o licra: el sol de Curazao quema en minutos dentro del agua.','<b>Bloqueador amigable con el arrecife</b> (sin oxibenzona), aplicado 20 minutos antes de entrar.','<b>Bolsa seca o forro impermeable</b> para el celular, y una GoPro si alguien tiene.','Toalla, gafas de sol, gorra, agua y algo de comer.','<b>Regla de oro:</b> no tocar ni alimentar las tortugas ni el coral.'], title:'Gran día de playas del oeste', intro:'Todos juntos en los 2 carros. Shete Boka en la mañana, tortugas, Kenepa, el mirador, Cas Abao y flamencos al regreso.',
+ note:'<b>Las playas ya están decididas: vamos todos.</b> Lo opcional son las actividades dentro de cada playa (Seabob, Waterbikes, bote eléctrico, silla). <b>Vean los videos antes de elegir</b> ▶ y marquen ✅ o ❌.',kicker:'Martes 8 de diciembre', kit:['<b>Careta y snorkel propios</b>: alquilarlos allá es caro y no siempre hay. Cómprenlos en Colombia (una careta básica pesa poco).','<b>Zapatos de agua</b> para todos: en Piskado, Kenepa y Cas Abao hay piedras y coral.','<b>Chaleco o flotador</b> para quien no nade bien: así también ven las tortugas sin esfuerzo.','<b>Camiseta con filtro UV</b> o licra: el sol de Curazao quema en minutos dentro del agua.','<b>Bloqueador amigable con el arrecife</b> (sin oxibenzona), aplicado 20 minutos antes de entrar.','<b>Bolsa seca o forro impermeable</b> para el celular, y una GoPro si alguien tiene.','Toalla, gafas de sol, gorra, agua y algo de comer.','<b>Regla de oro:</b> no tocar ni alimentar las tortugas ni el coral.'], title:'Gran día de playas del oeste', intro:'Todos juntos en los 2 carros. Shete Boka en la mañana, tortugas, Kenepa, el mirador, Cas Abao y flamencos al regreso.',
  outfit:['Vayan con el vestido de baño puesto desde el hotel, salida de baño o camiseta con filtro UV, gorra y gafas.','Tenis para Shete Boka y zapatos de agua para las playas (hay rocas y coral).','En el bolso: careta y snorkel, toalla, bloqueador amigable con el arrecife, agua y una bolsa seca para el celular.','Cena en Seaside Grill: casual elegante.'],
  meals:[['Desayuno','World Café · 7:00 a.m. (abre a esa hora)'],['Almuerzo','Por fuera: kiosco de Kenepa (pastechi) o restaurante de Cas Abao · o lunch box si el hotel lo da'],['Cena','🥩 Seaside Grill (carnes) · 6:30 p.m.']],
  money:{base:'≈ US$32',txt:'Shete Boka US$15, Cas Abao unos US$2 por persona y almuerzo por fuera unos US$15. Las actividades de cada playa son opcionales.'},
@@ -293,16 +330,16 @@ const DAYS=[
 },
 {
  id:'mie', tab:'Mié 9', sub:'Historia + rumba', color:'#7C6BD0', emo:'💃',
- kicker:'Miércoles 9 de diciembre', title:'Historia de día, rumba de noche', intro:'Walking tour guiado en la mañana, almuerzo en el hotel, destilería del Blue Curaçao en la tarde, y la noche de fiesta en Mambo Beach.',
+ note:'Todo hoy es <b>opcional</b>: walking tour, museo, Chobolobo y la rumba. Miren los videos ▶ y marquen <b>✅ Voy</b> o <b>❌ No voy</b> en cada uno.',kicker:'Miércoles 9 de diciembre', title:'Historia de día, rumba de noche', intro:'Walking tour guiado en la mañana, almuerzo en el hotel, destilería del Blue Curaçao en la tarde, y la noche de fiesta en Mambo Beach.',
  outfit:['Mañana: ropa fresca, sombrero y tenis cómodos (son 2 horas caminando).','Noche: un look que sirva para Oceana (casual elegante) y para la rumba. Hombres con pantalón de lino o jean y camisa; mujeres con vestido. Zapato cómodo para la arena.','Propuesta: <b>noche de blanco</b> para la foto grupal 🤍.'],
  meals:[['Desayuno','World Café · 7:30 a.m.'],['Almuerzo','World Café · 1:15 p.m.'],['Cena','🦞 Oceana (mariscos caribeños) · 6:00 p.m.']],
- money:{base:'≈ US$13',txt:'Propina para el guía (US$10–15) y parqueo. El museo, Chobolobo y la rumba son opcionales.'},
+ money:{base:'≈ US$1',txt:'Solo el parqueo. Además, lo que elijan: propina del walking tour (US$10–15), museo, Chobolobo y la rumba (taxi US$16 + tragos).'},
  tips:['El walking tour se paga con propinas: lleven efectivo.','Chobolobo funciona solo de lunes a viernes, el último tour es a las 3 p.m. y se llena: reserven.','En la rumba nadie maneja. Usen la app 24-7 Taxi Curaçao (vans de hasta 9) y acuerden el precio antes de subir. Después de las 11 p.m. hay recargo del 25%.'],
  steps:[
   {t:'7:30',s:'a.m.',h:'Desayuno · World Café',cls:'meal-st'},
   {t:'8:50',s:'a.m.',h:'Salida en carro a Otrobanda y parqueo',map:'Renaissance Mall & Rif Fort Curaçao',d:'Parqueen cerca del Rif Fort. <b>Hay que pagar parqueadero:</b> efectivo, ojalá en florines (aprox. 1 Cg la hora).',cost:{id:'parqueo_mie',usd:1,label:'Parqueo miércoles (parte de cada uno)',base:1}},
   {t:'9:15',s:'a.m.',h:'Punto de encuentro del Free Walking Tour',map:'Free Walking Tours Curaçao Rif Fort',w:'Frente al Rif Fort, a 5 minutos de la terminal de cruceros',d:'Lleguen 15 minutos antes. Salen varios tours del mismo sitio: confirmen el nombre del guía en la reserva.'},
-  {t:'9:30',s:'a.m.',h:'Free Walking Tour · la ruta (2 h)',g:['riffort','fortams','mercado','sinagoga','puente','kurahulanda'],w:'Con un guía local, nacido y criado en la isla',d:'Cuenta cómo Curazao pasó de ser "la isla inútil" a potencia del Caribe: piratas, la trata de esclavos, por qué el Blue Curaçao es azul y qué significa "Dushi". El guía decide el orden, pero el recorrido incluye:<ol><li><b>Rif Fort</b> (inicio): fuerte de 1828 que cuidaba la entrada de la bahía.</li><li><b>Degustación</b> de ron y Blue Curaçao.</li><li><b>Fuerte Amsterdam</b>: sede del gobierno desde 1634.</li><li><b>Mercado flotante</b>: botes con frutas y verduras traídas de Venezuela.</li><li><b>Sinagoga Mikvé Israel-Emanuel</b>: la más antigua de las Américas, con piso de arena.</li><li><b>Puente Reina Emma</b>.</li><li><b>Kura Hulanda</b>: barrio histórico restaurado.</li><li><b>Waterfront</b>: las fachadas de Handelskade.</li><li><b>Art Alley</b>: callejón de arte.</li><li><b>Galería Nena Sanchez</b>: la artista de las flores y colores tropicales de Curazao.</li><li><b>Distrito de arte de Otrobanda</b> y sus callejones: murales del festival Kaya Kaya y estatuas y plazas por el camino.</li></ol>Hay una pausa a mitad de camino para baño y agua, y el guía les indica dónde comprar helado.',tags:[['Propina','p']],cost:{id:'propina_tour',usd:12,label:'Propina walking tour',base:1}},
+  {t:'9:30',s:'a.m.',h:'Free Walking Tour · la ruta (2 h)',g:['riffort','fortams','mercado','sinagoga','puente','kurahulanda'],w:'Con un guía local, nacido y criado en la isla',d:'Cuenta cómo Curazao pasó de ser "la isla inútil" a potencia del Caribe: piratas, la trata de esclavos, por qué el Blue Curaçao es azul y qué significa "Dushi". El guía decide el orden, pero el recorrido incluye:<ol><li><b>Rif Fort</b> (inicio): fuerte de 1828 que cuidaba la entrada de la bahía.</li><li><b>Degustación</b> de ron y Blue Curaçao.</li><li><b>Fuerte Amsterdam</b>: sede del gobierno desde 1634.</li><li><b>Mercado flotante</b>: botes con frutas y verduras traídas de Venezuela.</li><li><b>Sinagoga Mikvé Israel-Emanuel</b>: la más antigua de las Américas, con piso de arena.</li><li><b>Puente Reina Emma</b>.</li><li><b>Kura Hulanda</b>: barrio histórico restaurado.</li><li><b>Waterfront</b>: las fachadas de Handelskade.</li><li><b>Art Alley</b>: callejón de arte.</li><li><b>Galería Nena Sanchez</b>: la artista de las flores y colores tropicales de Curazao.</li><li><b>Distrito de arte de Otrobanda</b> y sus callejones: murales del festival Kaya Kaya y estatuas y plazas por el camino.</li></ol>Hay una pausa a mitad de camino para baño y agua, y el guía les indica dónde comprar helado.',tags:[['Propina','p']],cost:{id:'propina_tour',usd:12,label:'Free Walking Tour (propina)'}},
   {t:'11:45',s:'a.m.',h:'Museo Kura Hulanda',g:'kurahulanda',tt:'kurahulanda',opt:1,map:'Museum Kura Hulanda',w:'Klipstraat 9, Otrobanda · lunes a sábado, 8 a.m. a 4 p.m.',d:'Cuenta la historia de la trata de esclavos en el Caribe y de los reinos de África Occidental. Es fuerte, pero muy valioso. Calculen 1 hora. Quien no entre puede pasear por Kura Hulanda Village o el Rif Fort.',tags:[['Opcional','o']],cost:{id:'kurahulanda',usd:12,label:'Museo Kura Hulanda'}},
   {t:'12:50',s:'p.m.',h:'Regreso al hotel'},
   {t:'1:15',s:'p.m.',h:'Almuerzo · World Café',cls:'meal-st',d:'Cierra a las 3:30.'},
@@ -311,8 +348,8 @@ const DAYS=[
   {t:'4:20',s:'p.m.',h:'Hotel: siesta de rumberos y alistarse 😴',d:'Hoy se devuelven los carros (el alquiler es de lunes a miércoles).'},
   {t:'6:00',s:'p.m.',h:'Cena · Oceana (mariscos caribeños)',img:'img/oceana.jpg',cls:'meal-st',w:'A la carta, frente al mar',d:'Lleguen <b>a la apertura</b>. Código: casual elegante (el outfit de la rumba sirve).',tags:[['Casual elegante','w']]},
   {t:'7:30',s:'p.m.',h:'Previa en el hotel 🍸',d:'Show, casino o Rendezvous. Los tragos del hotel están incluidos.'},
-  {t:'9:45',s:'p.m.',h:'Taxi a Mambo Beach Boulevard',cls:'party',map:'Mambo Beach Boulevard Curaçao',d:'Unos 10–20 minutos. Pidan una van para los 8 en la app 24-7 Taxi Curaçao, o 2 taxis oficiales (placa "TX").',tags:[['Rumba','g']],cost:{id:'taxi_mambo',usd:8,label:'Taxi a Mambo, ida y vuelta (parte de cada uno)'}},
-  {t:'10:00',s:'p.m.',h:'Cabana Beach · Cabana Nights 🎉',g:'cabana',tt:'cabana',cls:'party',map:'Cabana Beach Curaçao',d:'El miércoles es la noche fuerte de Cabana: música en vivo durante la cena y después DJ en la arena, hasta la 1:30 a.m. Según reseñas de visitantes, la entrada es gratis. Es al aire libre, muy turístico, con ambiente diverso y gay-friendly. Una cerveza cuesta unos US$5 y un cóctel unos US$12.',tags:[['Entrada gratis','p']],cost:{id:'tragos_mambo',usd:30,label:'Tragos en la rumba (aprox.)'}},
+  {t:'9:45',s:'p.m.',h:'Taxi a Mambo Beach Boulevard',cls:'party',map:'Mambo Beach Boulevard Curaçao',d:'Unos 10–20 minutos. El taxi sale a unos US$16 por persona (8 de ida y 8 de vuelta). Pidan una van para los 8 en la app 24-7 Taxi Curaçao, o 2 taxis oficiales (placa "TX").',tags:[['Rumba','g']]},
+  {t:'10:00',s:'p.m.',h:'Cabana Beach · Cabana Nights 🎉',g:'cabana',tt:'cabana',cls:'party',map:'Cabana Beach Curaçao',d:'El miércoles es la noche fuerte de Cabana: música en vivo durante la cena y después DJ en la arena, hasta la 1:30 a.m. Según reseñas de visitantes, la entrada es gratis. Es al aire libre, muy turístico, con ambiente diverso y gay-friendly. Una cerveza cuesta unos US$5 y un cóctel unos US$12.',tags:[['Entrada gratis','p']],cost:{id:'rumba',usd:46,label:'Noche de rumba en Mambo (taxi US$16 + tragos ≈ US$30)'}},
   {t:'11:30',s:'p.m.',h:'Club X Mambo (para los que sigan)',cls:'party',opt:1,w:'Último piso del Mambo BLVD · miércoles a domingo, 10 p.m. a 3 a.m.',map:'Club X Mambo Curaçao'},
   {t:'1:30',s:'a.m.',h:'Regreso en taxi al hotel',cls:'party',d:'Acuerden la tarifa antes de subir (el recargo nocturno es del 25%).'},
   {t:'—',s:'',h:'Los que se quedan en el hotel',d:'Desires (discoteca, hasta la 1 a.m.), casino y música en el lobby. Todo incluido.'}
@@ -320,10 +357,10 @@ const DAYS=[
 },
 {
  id:'jue', tab:'Jue 10', sub:'Despedida', color:'#3FB984', emo:'🛶',
- kicker:'Jueves 10 de diciembre', title:'Maletas y despedida', intro:'Sin carros y sin salidas: empacar, disfrutar el hotel, entregar la habitación a tiempo y regresar a Bogotá.',
+ note:'Día de hotel y de regreso. No hay que elegir nada.',kicker:'Jueves 10 de diciembre', title:'Maletas y despedida', intro:'Sin carros y sin salidas: empacar, disfrutar el hotel, entregar la habitación a tiempo y regresar a Bogotá.',
  outfit:['Mañana: vestido de baño para la última piscina.','Para el viaje: ropa cómoda. Déjenla a mano para cambiarse después de la piscina.'],
- meals:[['Desayuno','World Café · 7:30 a.m.'],['Almuerzo','World Café · 12:30 p.m. (el último 😢)'],['Cena','En el aeropuerto o en Bogotá']],
- money:{base:'US$0',txt:'Todo incluido. Dejen algo para el duty free y las propinas.'},
+ meals:[['Desayuno','World Café · 7:30 a.m.'],['Almuerzo','World Café · 12:30 p.m. (el último 😢)'],['Cena','En el aeropuerto de Curazao (lleven plata)']],
+ money:{base:'≈ US$15',txt:'Comida en el aeropuerto antes del vuelo. Dejen algo para el duty free y las propinas.'},
  tips:['Empaquen la noche del miércoles, antes de la rumba, o temprano en la mañana.','Recuerden el peso: 8 kg en el morral y 10 kg en la maleta de ruedas. Nada va en bodega.','Líquidos de máximo 100 ml. Los licores se compran en el duty free, después del control de seguridad.'],
  steps:[
   {t:'7:30',s:'a.m.',h:'Desayuno · World Café',cls:'meal-st'},
@@ -334,7 +371,7 @@ const DAYS=[
   {t:'12:30',s:'p.m.',h:'Último almuerzo · World Café',cls:'meal-st'},
   {t:'1:30',s:'p.m.',h:'Piscina, bar y fotos finales 📸',d:'Pregunten si hay "hospitality room" o duchas en el spa o el gimnasio para cambiarse antes de salir.'},
   {t:'3:15',s:'p.m.',h:'Traslado al aeropuerto',tags:[['Incluido','p']]},
-  {t:'3:30',s:'p.m.',h:'Aeropuerto de Curazao (CUR)',d:'Lleguen 3 horas antes: check-in, seguridad y duty free.'},
+  {t:'3:30',s:'p.m.',h:'Aeropuerto de Curazao (CUR)',d:'Lleguen 3 horas antes: check-in, seguridad y duty free. Coman algo antes de abordar: el vuelo llega de noche.',cost:{id:'comida_cur',usd:15,label:'Comida en el aeropuerto (regreso)',base:1}},
   {t:'6:20',s:'p.m.',h:'Vuelo Avianca Curazao → Bogotá',tags:[['Incluido','p']]},
   {t:'7:20',s:'p.m.',h:'Llegada aproximada a Bogotá (hora Colombia)',d:'Confirmen la hora exacta en su reserva. ¡Bienvenidos a casa! 🇨🇴'}
  ]
@@ -350,23 +387,23 @@ const DINNERS=[
 
 /* ============ RENDER ============ */
 const tabs=document.getElementById('tabs'), main=document.getElementById('main');
-const VIEWS=[{id:'antes',tab:'Antes',sub:'Checklist',color:'#0E3B53'},...DAYS,{id:'comida',tab:'Comidas',sub:'Restaurantes',color:'#F26B5B'},{id:'hotel',tab:'🏨 Hotel',sub:'Mapa',color:'#0E3B53'},{id:'plata',tab:'💵 Mi plata',sub:'Cuánto llevar',color:'#B8860B'}];
-let joined=store.get('dushi_join',{});
+const VIEWS=[{id:'inicio',tab:'👋 Inicio',sub:'Empieza aquí',color:'#F26B5B'},{id:'antes',tab:'Antes',sub:'Checklist',color:'#0E3B53'},...DAYS,{id:'comida',tab:'Comidas',sub:'Restaurantes',color:'#F26B5B'},{id:'hotel',tab:'🏨 Hotel',sub:'Mapa',color:'#0E3B53'},{id:'plata',tab:'💵 Mi plata',sub:'Cuánto llevar',color:'#B8860B'}];
+let joined=store.get('dushi_pick',{});
 let checks=store.get('dushi_checks',{});
 
 function tagHtml(t){return t?'<div class="tags">'+t.map(([x,c])=>`<span class="tag ${c||''}">${x}</span>`).join('')+'</div>':''}
-function joinBox(c){if(!c||c.base)return'';return `<label class="join"><input type="checkbox" data-join="${c.id}" ${joined[c.id]?'checked':''}> Me apunto · ${c.label} (US$${c.usd})</label>`}
+function joinBox(c,vid){if(!c||c.base)return'';const v=joined[c.id];return `<div class="pick ${v||'pend'}" data-pid="${c.id}"><div class="pq">${vid?'<span class="pv">👆 Primero mira el video</span>':''}¿Te apuntas a <b>${c.label}</b>${c.usd?` <span class="pp">US$${c.usd}</span>`:''}?</div><div class="pb"><button data-pick="${c.id}" data-v="si">✅ Voy</button><button data-pick="${c.id}" data-v="no">❌ No voy</button></div></div>`}
 
 function renderDay(d){
  const steps=d.steps.map(s=>{
   const map=s.map?`<a href="${gm(s.map)}" target="_blank" rel="noopener">📍 ${s.w||'Ver en el mapa'}</a>`:(s.w||'');
   const cls=['st',s.opt?'opt':'',s.cls||''].join(' ');
   return `<li class="${cls}"><div class="t">${s.t}<small>${s.s||''}</small></div><span class="dot"></span>
-   <div class="b">${s.img?`<img class="ph" src="${s.img}" alt="" loading="lazy">`:''}<h4>${s.h}</h4>${map?`<div class="w">${map}</div>`:''}${s.d?`<div class="d">${s.d}</div>`:''}${s.d2?`<div class="d" style="font-weight:700">${s.d2}</div>`:''}${s.gal?`<div class="gal">${s.gal.map(([src,c])=>`<figure><img src="${src}" alt="" loading="lazy"><figcaption>${c}</figcaption></figure>`).join('')}</div>`:''}${tagHtml(s.tags)}
+   <div class="b">${s.img?`<img class="ph" src="${s.img}" alt="" loading="lazy">`:''}<h4>${s.h}</h4>${map?`<div class="w">${map}</div>`:''}${s.d?`<div class="d">${s.d}</div>`:''}${s.d3||''}${s.gal?`<div class="gal">${s.gal.map(([src,c])=>`<figure><img src="${src}" alt="" loading="lazy"><figcaption>${c}</figcaption></figure>`).join('')}</div>`:''}${tagHtml(s.tags)}
    <div class="mbtns">${s.g?`<button class="gbtn" data-g="${[].concat(s.g).join('|')}">🎧 Escuchar al guía</button>`:''}${s.tt?`<button class="ttbtn" data-tt="${TT[s.tt]}" data-l="▶ Ver video">▶ Ver video</button>`:''}${s.tts?s.tts.map(([k,l])=>`<button class="ttbtn" data-tt="${TT[k]}" data-l="▶ ${l}">▶ ${l}</button>`).join(''):''}${s.vid?`<a class="vid" href="${s.vid}" target="_blank" rel="noopener">▶ ${s.vidl||'Ver el video'} en TikTok</a>`:''}</div>
-   <div class="gbox" hidden></div><div class="ttbox" hidden></div>${joinBox(s.cost)}${joinBox(s.cost2)}</div></li>`}).join('');
+   <div class="gbox" hidden></div><div class="ttbox" hidden></div>${joinBox(s.pick,s.tt||s.tts)}${joinBox(s.cost,s.tt||s.tts)}${joinBox(s.cost2,s.tt||s.tts)}</div></li>`}).join('');
  return `<section class="view" id="v-${d.id}" style="--day:${d.color}">
-  <div class="dayhead"><span class="emo">${d.emo}</span><div class="k">${d.kicker}</div><h2>${d.title}</h2><p>${d.intro}</p><a class="routebtn" href="ruta.html#${d.id}">🗺️ Ver la ruta animada del día</a></div>
+  <div class="dayhead"><span class="emo">${d.emo}</span><div class="k">${d.kicker}</div><h2>${d.title}</h2><p>${d.intro}</p><a class="routebtn" href="ruta.html?d=${d.id}">🗺️ Ver la ruta animada de este día ▶</a></div>${d.note?`<div class="howto"><span>👋</span><div>${d.note}</div></div>`:''}
   <div class="cards">
    <div class="card money"><h3>💵 Dinero a alistar</h3><div class="big">${d.money.base} <span class="pill">base por persona</span></div><p>${d.money.txt}</p></div>
    <div class="card"><h3>👗 ¿Cómo me visto?</h3><ul>${d.outfit.map(o=>`<li>${o}</li>`).join('')}</ul></div>
@@ -391,7 +428,7 @@ function renderAntes(){
   ['apps','Apps y mapas sin conexión','Ver la lista de abajo.'],
   ['candado','Candado para el cañón de Punda','Márquenlo con sus nombres antes de viajar.'],
   ['usd','Dólares en billetes pequeños','De 1, 5, 10 y 20. Los billetes rotos o manchados no se los reciben.'],
-  ['banco','Avisar al banco del viaje','Activen las compras internacionales en la tarjeta.']
+  ['banco','Revisar la tarjeta','Hoy la mayoría de tarjetas ya funcionan en el exterior. Solo revisen si su banco pide activar compras internacionales.']
  ];
  return `<section class="view" id="v-antes" style="--day:#0E3B53">
   <h2 class="sec-h">Antes de viajar ✅</h2>
@@ -401,7 +438,7 @@ function renderAntes(){
   <h2 class="sec-h" style="margin-top:28px">🎒 La maleta (sin bodega)</h2>
   <div class="cards">
    <div class="card"><h3>Lo que permite el plan</h3><ul><li>Morral sin ruedas de <b>8 kg</b>.</li><li>Maleta con ruedas de <b>10 kg</b>.</li><li>Líquidos en envases de máximo 100 ml, en una bolsa transparente.</li></ul></div>
-   <div class="card"><h3>Para 5 días</h3><ul><li>3 vestidos de baño, una salida de baño y una camiseta UV.</li><li>2 outfits casual elegantes (las cenas a la carta piden pantalón largo para hombres).</li><li>Outfit blanco para la rumba.</li><li>Tenis, chanclas y zapatos de agua.</li><li>Careta y snorkel propios, zapatos de agua, camiseta UV, gorra, gafas de sol y bolsa seca para el celular.</li><li>Bloqueador amigable con el arrecife, repelente y medicamentos personales.</li><li>Cargador, batería externa y adaptador (si lo necesitan).</li></ul></div>
+   <div class="card"><h3>Para 5 días</h3><ul><li>3 vestidos de baño, una salida de baño y una camiseta UV.</li><li>3 outfits casual elegantes, uno por cada cena a la carta: Portofino, Seaside Grill y Oceana (las cenas a la carta piden pantalón largo para hombres).</li><li>Outfit blanco para la rumba.</li><li>Tenis, chanclas y zapatos de agua.</li><li>Careta y snorkel propios, zapatos de agua, camiseta UV, gorra, gafas de sol y bolsa seca para el celular.</li><li>Bloqueador amigable con el arrecife, repelente y medicamentos personales.</li><li>Cargador, batería externa y adaptador (si lo necesitan).</li></ul></div>
   </div>
 
   <h2 class="sec-h" style="margin-top:28px">📱 Apps para descargar</h2>
@@ -470,6 +507,52 @@ function renderComida(){
  </section>`;
 }
 
+/* ===== INICIO (guía para la familia) ===== */
+const FAM=['Jeffry','Juliette','Juan Esteban','William','Leila','Karina','Maryluz','Esmeralda'];
+function allPicks(){const out=[];DAYS.forEach(d=>d.steps.forEach(st=>[st.pick,st.cost,st.cost2].forEach(c=>{if(c&&!c.base)out.push({...c,day:d.tab,did:d.id})})));return out}
+function renderInicio(){
+ const me=store.get('dushi_me','');
+ return `<section class="view" id="v-inicio" style="--day:#F26B5B">
+  <h2 class="sec-h">👋 ¡Hola, familia!</h2>
+  <p class="lead">Esta página es nuestro itinerario de Curazao. Aquí van a ver qué hacemos cada día, cuánta plata llevar y cómo vestirse. <b>Casi todo es opcional</b>: cada uno elige a qué se apunta (menos las playas del martes, que ya están decididas para todos).</p>
+  <div class="card" style="margin-bottom:14px"><h3>1️⃣ ¿Quién eres?</h3><div class="who" id="who">${FAM.map(n=>`<button data-me="${n}" class="${n===me?'on':''}">${n}</button>`).join('')}</div></div>
+  <div class="step"><div class="n">2</div><div><b>Mira cada día</b><p>Arriba están las pestañas <b>Dom 6, Lun 7, Mar 8…</b> Tócalas para ver el plan de cada día, paso a paso.</p><a class="bigbtn" href="#" onclick="show('dom');return false">Empezar por el domingo →</a></div></div>
+  <div class="step"><div class="n">3</div><div><b>Mira los videos y escucha al guía</b><p>En cada actividad toca <b>▶ Ver video</b> para saber cómo es, y <b>🎧 Escuchar al guía</b> para que te cuenten la historia del lugar. <b>Antes de elegir una actividad, mira su video.</b></p></div></div>
+  <div class="step"><div class="n">4</div><div><b>Elige ✅ Voy o ❌ No voy</b><p>Cada actividad opcional tiene estos dos botones (en amarillo las que te faltan). Con eso sabemos con quién contamos y reservamos a tiempo.</p><div class="prog"><i id="progBar"></i></div><div id="progTx" style="font-weight:700"></div><div class="pend-list" id="pendList"></div></div></div>
+  <div class="step"><div class="n">5</div><div><b>Mira cuánta plata llevar</b><p>La pestaña <b>💵 Mi plata</b> suma sola lo que elegiste, en dólares y en pesos.</p><a class="bigbtn" href="#" onclick="show('plata');return false">💵 Ver cuánto llevar →</a></div></div>
+  <div class="step"><div class="n">6</div><div><b>Envíale tus elecciones a Jeffry</b><p>Cuando termines de elegir, toca el botón verde y mándalo por WhatsApp (a Jeffry o al grupo de la familia).</p><button class="wa" id="waBtn">📲 Enviar mis elecciones por WhatsApp</button></div></div>
+  <div class="card" style="margin-top:14px"><h3>✨ Más cosas para explorar</h3>
+   <a class="bigbtn" href="ruta.html">🗺️ Rutas animadas (como Google Maps)</a>
+   <a class="bigbtn" href="#" onclick="show('hotel');return false" style="background:#1FB5B0">🏨 Mapa interactivo del hotel</a>
+   <a class="bigbtn" href="#" onclick="show('antes');return false" style="background:#7C6BD0">✅ Lista para antes de viajar</a></div>
+  <div class="card" style="margin-top:14px"><h3>🔊 La voz del guía</h3><p style="margin:0 0 8px">Si la voz suena muy robótica, prueben otra de la lista. En computador, el navegador <b>Microsoft Edge</b> tiene las voces más naturales.</p>
+   <select id="voiceSel" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);font:500 15px Outfit,sans-serif"></select>
+   <button class="bigbtn" id="voiceTest" style="width:100%;border:0;cursor:pointer;background:#F26B5B">🔊 Probar la voz</button></div>
+ </section>`;
+}
+function updInicio(){
+ const ps=allPicks();const done=ps.filter(p=>joined[p.id]);const bar=document.getElementById('progBar');if(!bar)return;
+ bar.style.width=(done.length/ps.length*100)+'%';
+ document.getElementById('progTx').textContent=done.length===ps.length?'🎉 ¡Elegiste todo! Ahora mándale tus elecciones a Jeffry.':`Llevas ${done.length} de ${ps.length}. Te faltan:`;
+ document.getElementById('pendList').innerHTML=ps.filter(p=>!joined[p.id]).map(p=>`<a href="#" data-goto="${p.did}" data-pid2="${p.id}">👉 ${p.day} · ${p.label}</a>`).join('');
+}
+function fillVoices(){const sel=document.getElementById('voiceSel');if(!sel)return;let vs=[];try{vs=speechSynthesis.getVoices().filter(v=>/^es/i.test(v.lang))}catch(e){}
+ const best=bestVoice();sel.innerHTML=vs.length?vs.map(v=>`<option value="${v.name}" ${best&&best.name===v.name?'selected':''}>${v.name} (${v.lang})</option>`).join(''):'<option>Voz del sistema</option>'}
+try{speechSynthesis.addEventListener('voiceschanged',fillVoices)}catch(e){}
+document.addEventListener('change',e=>{if(e.target.id==='voiceSel'){try{localStorage.setItem('dushi_voice',e.target.value)}catch(_){}}});
+document.addEventListener('click',e=>{
+ const w=e.target.closest('[data-me]');if(w){store.set('dushi_me',w.dataset.me);document.querySelectorAll('[data-me]').forEach(b=>b.classList.toggle('on',b===w));return}
+ if(e.target.id==='voiceTest'){speakText('Bon bini, familia. Yo soy la voz del guía y les voy a contar la historia de cada lugar de Curazao.');return}
+ const gt=e.target.closest('[data-goto]');if(gt){e.preventDefault();show(gt.dataset.goto);setTimeout(()=>{const el=document.querySelector(`.pick[data-pid="${gt.dataset.pid2}"]`);if(el)el.scrollIntoView({behavior:'smooth',block:'center'})},150);return}
+ if(e.target.id==='waBtn'){const me=store.get('dushi_me','');if(!me){alertBox('Primero elige tu nombre en el paso 1 (¿Quién eres?).');document.getElementById('who').scrollIntoView({behavior:'smooth',block:'center'});return}
+  const ps=allPicks();const si=ps.filter(p=>joined[p.id]==='si'),no=ps.filter(p=>joined[p.id]==='no'),na=ps.filter(p=>!joined[p.id]);
+  const L=a=>a.map(p=>`• ${p.day}: ${p.label}`).join('\n');
+  let t=`🇨🇼 *Dushi Trip* · Elecciones de *${me}*\n\n✅ *Voy:*\n${L(si)||'—'}\n\n❌ *No voy:*\n${L(no)||'—'}`;if(na.length)t+=`\n\n❔ *Sin decidir:*\n${L(na)}`;
+  const tot=document.getElementById('tUsd');calc();if(tot)t+=`\n\n💵 Plata aprox.: ${document.getElementById('tUsd').textContent}`;
+  location.href='https://wa.me/?text='+encodeURIComponent(t);}
+});
+function alertBox(m){const d=document.createElement('div');d.textContent=m;d.style.cssText='position:fixed;left:16px;right:16px;bottom:24px;z-index:99;background:#0E3B53;color:#fff;padding:14px 16px;border-radius:14px;font-weight:600;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.3)';document.body.appendChild(d);setTimeout(()=>d.remove(),3500)}
+
 /* ===== MAPA DEL HOTEL ===== */
 const HOT=[
  [1,'Recepción','serv',763,512,'Registro, manillas y check-out. Aquí pregunten horarios, shows y toallas para salir.'],
@@ -516,8 +599,11 @@ function renderHotel(){
   <div class="hmap" id="hmap"><div class="hin" id="hin"><img src="img/resort-map.jpg" alt="Mapa del resort Dreams Curaçao">
    ${HOT.map((h,i)=>`<button class="pin c-${h[2]}" data-i="${i}" style="left:${h[3]/11}%;top:${h[4]/8.71}%;--pc:${HCAT[h[2]][1]};animation-delay:${0.15+i*0.04}s">${h[0]}</button>`).join('')}
   </div></div>
+  <div class="inv">👉 <b>Toca ▶ Recorrido animado</b> y el mapa los lleva solito por los lugares principales del hotel, con fotos y horarios.</div>
   <div class="htools"><button id="htour">▶ Recorrido animado</button><button id="hreset">⤢ Ver todo</button></div>
-  <div class="hcard" id="hcard"><p class="lead" style="margin:0">👆 Toca un punto del mapa o dale ▶ al recorrido.</p></div>
+  <div class="hcard" id="hcard"><p class="lead" style="margin:0">👆 También pueden tocar cualquier número del mapa o de la lista de abajo.</p></div>
+  <h3 class="tl-title" style="font-size:18px">¿Qué es cada número?</h3>
+  <div class="legend">${HOT.map((h,i)=>h[0]==='❤'?'':`<button data-hi="${i}" class="${h[2]==='no'?'nog':''}" style="--pc:${HCAT[h[2]][1]}"><i>${h[0]}</i>${h[1]}${h[2]==='no'?' ⛔':''}</button>`).join('')}<button data-hi="${HOT.findIndex(h=>h[0]==='❤')}" style="--pc:#E8457A"><i>❤</i>Rincones románticos</button></div>
  </section>`;
 }
 let hz={s:1,x:0,y:0},htourOn=false;
@@ -530,6 +616,7 @@ function hshow(i){const h=HOT[i];const c=HCAT[h[2]];
  hzoom(i);}
 document.addEventListener('click',e=>{
  const p=e.target.closest('.pin');if(p){htourOn=false;hshow(+p.dataset.i);return}
+ const lg=e.target.closest('[data-hi]');if(lg){htourOn=false;hshow(+lg.dataset.hi);document.getElementById('hmap').scrollIntoView({behavior:'smooth',block:'center'});return}
  const c=e.target.closest('#hchips button');if(c){document.querySelectorAll('#hchips button').forEach(b=>b.classList.toggle('on',b===c));const k=c.dataset.c;document.querySelectorAll('.pin').forEach(pp=>pp.classList.toggle('dim',k!=='all'&&!pp.classList.contains('c-'+k)));hzoom(null);return}
  if(e.target.id==='hreset'){htourOn=false;hzoom(null);return}
  if(e.target.id==='htour'){if(htourOn){htourOn=false;e.target.textContent='▶ Recorrido animado';return}htourOn=true;e.target.textContent='⏸ Detener recorrido';(async()=>{for(const n of HTOUR){if(!htourOn)break;hshow(HOT.findIndex(h=>h[0]===n));await new Promise(r=>setTimeout(r,3200))}if(htourOn){hzoom(null)}htourOn=false;e.target.textContent='▶ Recorrido animado'})();}
@@ -545,21 +632,21 @@ function renderPlata(){
  cs.forEach(c=>{(byDay[c.day]=byDay[c.day]||[]).push(c)});
  return `<section class="view" id="v-plata" style="--day:#B8860B">
   <h2 class="sec-h">¿Cuánto dinero debo llevar? 💵</h2>
-  <p class="lead">Los gastos base ya están sumados. Marquen las actividades opcionales a las que se apuntan y el total se actualiza solo. Los precios son por persona y aproximados.</p>
+  <p class="lead">Lo que pagan todos ya está sumado. Las actividades se suman solas cuando marcan <b>✅ Voy</b> (aquí o en cada día). Precios por persona y aproximados.</p>
   <div class="total"><div><div class="lbl">Total en dólares</div><div class="v" id="tUsd">—</div></div><div><div class="lbl">En pesos</div><div class="v" id="tCop">—</div></div><div class="note" id="tNote"></div></div>
   <div class="card">
    <div><b>Dólar de hoy (TRM):</b> <span id="rateTxt">cargando…</span></div>
    <small style="color:var(--muted)">Se actualiza sola cada vez que abren la página. El carro y la gasolina ya están sumados en lo base.</small>
   </div>
   ${Object.entries(byDay).map(([day,list])=>`<div class="mday">${day}</div>`+list.map(c=>`
-   <div class="mrow"><label>${c.base?'<span style="width:20px;text-align:center">●</span>':`<input type="checkbox" data-join="${c.id}" ${joined[c.id]?'checked':''}>`}<span>${c.label}<small>${c.base?'Base: todos':'Opcional'}</small></span></label><span class="amt">US$${c.usd}</span></div>`).join('')).join('')}
+   ${c.base?`<div class="mrow"><span>● ${c.label}<small>Lo pagan todos</small></span><span class="amt">US$${c.usd}</span></div>`:joinBox(c)}`).join('')).join('')}
   <div class="warn" style="margin-top:18px">El margen del 30% cubre la diferencia del cambio en la casa de cambio, propinas y gastos que siempre aparecen. Mezclen efectivo en billetes pequeños (playas, parqueo, propinas, kioscos) con tarjeta (actividades reservadas y tragos por fuera).</div>
  </section>`;
 }
 
 function calc(){
  const cs=allCosts(); let t=0;
- cs.forEach(c=>{if(c.base||joined[c.id])t+=c.usd});
+ cs.forEach(c=>{if(c.base||joined[c.id]==='si')t+=c.usd});
  const rate=RATE;
  const f=n=>n.toLocaleString('es-CO',{maximumFractionDigits:0});
  const u=document.getElementById('tUsd'); if(!u)return;
@@ -569,26 +656,28 @@ function calc(){
 }
 
 /* build */
-main.innerHTML=renderAntes()+DAYS.map(renderDay).join('')+renderComida()+renderHotel()+renderPlata()+'<p class="foot">Hecho con cariño para la familia · Precios y horarios consultados en noviembre de 2026; confírmenlos antes de ir.</p>';
+main.innerHTML=renderInicio()+renderAntes()+DAYS.map(renderDay).join('')+renderComida()+renderHotel()+renderPlata()+'<p class="foot">Hecho con cariño para la familia · Precios y horarios consultados en noviembre de 2026; confírmenlos antes de ir.</p>';
+setTimeout(()=>{updInicio();fillVoices()},0);
 tabs.innerHTML=VIEWS.map(v=>`<button class="tab" role="tab" data-v="${v.id}" style="--c:${v.color}">${v.tab}<small>${v.sub}</small></button>`).join('');
 
-function show(id){
+function show(id,noScroll){
  document.querySelectorAll('.view').forEach(s=>s.classList.toggle('on',s.id==='v-'+id));
  document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected',b.dataset.v===id));
  store.set('dushi_view',id);
  const b=document.querySelector(`.tab[data-v="${id}"]`); if(b)b.scrollIntoView({inline:'center',block:'nearest'});
- window.scrollTo({top:document.querySelector('nav.tabs').offsetTop,behavior:'instant'});
+ if(!noScroll)window.scrollTo({top:document.querySelector('nav.tabs').offsetTop,behavior:'instant'});
  calc();
 }
 let speaking=null;
-function voice(){const v=speechSynthesis.getVoices();return v.find(x=>/es[-_](CO|MX|US|419)/i.test(x.lang))||v.find(x=>/^es/i.test(x.lang))}
 document.addEventListener('click',e=>{
  const g=e.target.closest('.gbtn');
  if(g){const box=g.closest('.b').querySelector('.gbox');const keys=g.dataset.g.split('|');
   if(!box.hidden){box.hidden=true;g.classList.remove('on');g.textContent='🎧 Escuchar al guía';try{speechSynthesis.cancel()}catch(_){}return}
   box.innerHTML=keys.map(k=>(keys.length>1?`<b>${PLACES[k]?PLACES[k].n:''}</b>`:'')+GUIA[k]).join('');box.hidden=false;g.classList.add('on');g.textContent='⏹ Detener guía';
-  try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(keys.map(k=>GUIA[k]).join(' '));u.lang='es-ES';const v=voice();if(v)u.voice=v;u.rate=1;u.onend=()=>{g.classList.remove('on');g.textContent='🎧 Escuchar al guía'};speechSynthesis.speak(u)}catch(_){}
+  speakText(keys.map(k=>GUIA[k]).join(' '),()=>{g.classList.remove('on');g.textContent='🎧 Escuchar al guía'});
   return}
+ const pk=e.target.closest('[data-pick]');
+ if(pk){const id=pk.dataset.pick;joined[id]=pk.dataset.v;store.set('dushi_pick',joined);document.querySelectorAll(`.pick[data-pid="${id}"]`).forEach(x=>{x.classList.remove('pend','si','no');x.classList.add(pk.dataset.v)});calc();updInicio();return}
  const t=e.target.closest('.ttbtn');
  if(t){const box=t.closest('.b').querySelector('.ttbox');
   const same=box.dataset.cur===t.dataset.tt&&!box.hidden;
@@ -600,7 +689,6 @@ tabs.addEventListener('click',e=>{const b=e.target.closest('.tab');if(b)show(b.d
 
 document.addEventListener('change',e=>{
  const j=e.target.dataset.join;
- if(j){joined[j]=e.target.checked;store.set('dushi_join',joined);document.querySelectorAll(`[data-join="${j}"]`).forEach(x=>x.checked=e.target.checked);calc()}
  const c=e.target.dataset.check;
  if(c){checks[c]=e.target.checked;store.set('dushi_checks',checks);e.target.closest('li').classList.toggle('done',e.target.checked)}
 });
@@ -613,7 +701,7 @@ fetch('https://open.er-api.com/v6/latest/USD').then(r=>r.json()).then(j=>{if(j&&
 (function(){
  const now=new Date(); const map={'2026-12-06':'dom','2026-12-07':'lun','2026-12-08':'mar','2026-12-09':'mie','2026-12-10':'jue'};
  const k=now.toLocaleDateString('en-CA',{timeZone:'America/Curacao'});
- show(map[k]||store.get('dushi_view','antes'));
+ show(map[k]||store.get('dushi_view','inicio'),true);
 })();
 
 /* countdown to departure 6 dic 7:30 Bogotá */

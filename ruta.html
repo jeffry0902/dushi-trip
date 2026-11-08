@@ -99,6 +99,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#e9eef2;font-family:Ou
   </div>
   <button id="go">▶ Ver la ruta</button>
   <a id="back" href="index.html">← Volver al itinerario</a>
+  <p style="margin-top:14px;font-size:13px;max-width:440px">👉 Toca <b>▶</b> y mira la ruta. Al llegar a cada lugar, el guía les cuenta su historia. Con los botones de la derecha pueden pausar (⏸), ir más rápido (⏩) o salir (✕).</p>
 </div>
 
 <div id="done"><div class="box"><div style="font-size:42px">🎉</div><h2>¡Ruta completa!</h2><p id="dTx" style="color:var(--muted);margin:0">Bon bini na Kòrsou</p><div id="dBtns"></div><button class="ag" id="dAgain">Ver otro día</button></div></div>
@@ -178,7 +179,9 @@ const pt=(c,p={})=>({type:'Feature',properties:p,geometry:{type:'Point',coordina
 function idle(ms=3500){return Promise.race([new Promise(r=>map.once('idle',r)),sleep(ms)])}
 
 /* ================= estado ================= */
-let DAY=location.hash.slice(1)||'lun'; if(!ROUTES[DAY])DAY='lun';
+const QD=new URLSearchParams(location.search).get('d');
+let DAY=QD||location.hash.slice(1)||'dom'; if(!ROUTES[DAY])DAY='dom';
+const SINGLE=!!(QD&&ROUTES[QD]);
 let paused=false, speed=1, voiceOn=true, running=false, abortRun=false, skipWait=null;
 const st={banner:null,card:null,arrived:false,intro:0,outro:0,photo:null};
 
@@ -187,6 +190,13 @@ function buildMenu(){
 }
 $('days').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;DAY=b.dataset.d;history.replaceState(null,'','#'+DAY);buildMenu()});
 buildMenu();
+if(SINGLE){ // abierto desde un día específico: mostrar solo ese día
+  $('days').style.display='none';
+  const r=ROUTES[DAY];
+  $('days').insertAdjacentHTML('afterend',`<div id="oneDay" style="width:100%;max-width:440px;background:${r.color};color:#fff;border-radius:18px;padding:16px;text-align:left;box-shadow:0 6px 18px rgba(0,0,0,.15)"><div style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;opacity:.9">Ruta del día</div><div style="font-size:24px;font-weight:800;line-height:1.15">${r.title}</div><div style="font-size:14px;opacity:.95;margin-top:4px">${r.stops.length} paradas</div></div><a href="#" id="allDays" style="margin-top:10px;font-weight:600;color:#1A73E8">Ver los otros días</a>`);
+  $('go').textContent='▶ Toca aquí para ver la ruta';
+  $('allDays').onclick=e=>{e.preventDefault();$('days').style.display='';$('oneDay').remove();e.target.remove();$('go').textContent='▶ Ver la ruta'};
+}
 
 /* ================= UI helpers ================= */
 function setBanner(ic,tx,sub){ $('bIc').textContent=ic;$('bTx').textContent=tx;$('bSub').textContent=sub||'';$('banner').classList.add('on');st.banner={ic,tx,sub}}
@@ -203,8 +213,7 @@ function setCard(stop,i,n,arrived){
   st.card={e:P.e,n:P.n,s:stop.s,t:stop.t,i,total:n,arrived,g:arrived?GUIA[stop.p]||'':'' };
   if(arrived&&P.img){const im=new Image();im.src=P.img;st.photo=im}else st.photo=null;
 }
-function voice(){const v=speechSynthesis.getVoices();return v.find(x=>/es[-_](CO|MX|US|419)/i.test(x.lang))||v.find(x=>/^es/i.test(x.lang))}
-function speak(t){return new Promise(res=>{try{if(!voiceOn||recording||!t){res();return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='es-ES';const v=voice();if(v)u.voice=v;u.onend=res;u.onerror=res;speechSynthesis.speak(u)}catch(e){res()}})}
+function speak(t){return new Promise(res=>{if(!voiceOn||recording||!t){res();return}speakText(t,res)})}
 async function waitPaused(){while(paused&&!abortRun)await sleep(120)}
 
 /* ================= animación ================= */

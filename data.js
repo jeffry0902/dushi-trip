@@ -120,3 +120,18 @@ const ROUTES = {
     {p:'bog',t:'7:20 p.m.',m:'air',s:'¡Bienvenidos a casa!'} ]}
 };
 if (typeof module !== 'undefined') module.exports = {TT, PLACES, GUIA, ROUTES};
+
+/* Elige la voz más natural disponible en el dispositivo (Edge/Windows: "Natural"; Android: Google; iPhone: Mejorada/Premium) */
+function bestVoice(){
+  let vs=[];try{vs=speechSynthesis.getVoices().filter(v=>/^es/i.test(v.lang))}catch(e){return null}
+  if(!vs.length)return null;
+  let saved=null;try{saved=localStorage.getItem('dushi_voice')}catch(e){}
+  if(saved){const v=vs.find(x=>x.name===saved);if(v)return v}
+  const score=v=>{let s=0;const n=v.name;
+    if(/natural|neural|online/i.test(n))s+=50; if(/premium|enhanced|mejorada|siri/i.test(n))s+=40; if(/google/i.test(n))s+=30;
+    if(/CO/i.test(v.lang))s+=12; else if(/MX|US|419/i.test(v.lang))s+=8; else if(/ES/i.test(v.lang))s+=4;
+    if(/salome|gonzalo|dalia|jorge|paloma|elena|paulina|m[oó]nica/i.test(n))s+=5; if(v.localService===false)s+=3; return s};
+  return vs.sort((a,b)=>score(b)-score(a))[0];
+}
+function speakText(t,onend){try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);const v=bestVoice();if(v){u.voice=v;u.lang=v.lang}else u.lang='es-CO';u.rate=0.98;u.pitch=1.02;u.onend=onend||null;u.onerror=onend||null;speechSynthesis.speak(u);return u}catch(e){if(onend)onend()}}
+try{speechSynthesis.getVoices();speechSynthesis.onvoiceschanged=()=>{}}catch(e){}
