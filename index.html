@@ -495,7 +495,7 @@ function renderComida(){
 
 /* ===== INICIO (guía para la familia) ===== */
 /* Votos: se guardan en la hoja de Google de Jeffry (Apps Script). Pegar aquí la URL de la aplicación web: */
-const VOTE_URL='';
+const VOTE_URL='https://script.google.com/macros/s/AKfycbxTwHQ5ixe7Ezus-m2Eqrk8pX8Noj8LFEQTgiiMT7G2sn9oS9jXYwSgZc2JqiX0XG63jw/exec';
 const FAM=['Jeffry','Juliette','Juan Esteban','William','Leila','Karina','Maryluz','Esmeralda'];
 function allPicks(){const out=[];DAYS.forEach(d=>d.steps.forEach(st=>[st.pick,st.cost,st.cost2].forEach(c=>{if(c&&!c.base)out.push({...c,day:d.tab,did:d.id})})));return out}
 function updInicio(){
