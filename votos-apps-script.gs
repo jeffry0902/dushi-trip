@@ -1,12 +1,31 @@
 /* Dushi Trip · recibe los votos de la página y los guarda en esta hoja.
-   Pegar en: Hoja de Google > Extensiones > Apps Script.
+   Pegar en script.google.com > Nuevo proyecto (o desde una hoja: Extensiones > Apps Script).
    Implementar > Nueva implementación > Aplicación web
    (Ejecutar como: Yo · Quién tiene acceso: Cualquier usuario). */
 const HOJA = 'Votos';
 
+function libro_() {
+  let ss = null;
+  try { ss = SpreadsheetApp.getActive(); } catch (e) {}
+  if (ss) return ss;
+  const props = PropertiesService.getScriptProperties();
+  const id = props.getProperty('SHEET_ID');
+  if (id) return SpreadsheetApp.openById(id);
+  ss = SpreadsheetApp.create('Votos Curazao');   // se crea sola en tu Google Drive
+  props.setProperty('SHEET_ID', ss.getId());
+  return ss;
+}
+
 function hoja_() {
-  const ss = SpreadsheetApp.getActive();
+  const ss = libro_();
   return ss.getSheetByName(HOJA) || ss.insertSheet(HOJA);
+}
+
+/* Ejecuta esta función una vez (botón ▶ Ejecutar) para crear la hoja y autorizar. */
+function prepararHoja() {
+  const ss = libro_();
+  hoja_();
+  Logger.log('Hoja lista: ' + ss.getUrl());
 }
 
 function doPost(e) {
