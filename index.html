@@ -261,7 +261,7 @@ const DAYS=[
  outfit:['Viaje: ropa fresca y cómoda, tenis.','En la maleta de mano, arriba: vestido de baño, chanclas y bloqueador (máx. 100 ml).','Cena en Portofino (casual elegante): hombres con pantalón largo y camisa; mujeres con vestido o conjunto.'],
  meals:[['Desayuno','En El Dorado, después de migración (lleven plata para eso)'],['Almuerzo','World Café (buffet) · 12:30 p.m.'],['Cena','🍝 Portofino (italiano) · 6:00 p.m.']],
  money:{base:'≈ US$23',txt:'Transporte al aeropuerto (≈ US$8) y desayuno en El Dorado (≈ US$15). En Curazao todo está incluido. Lleven también US$10–20 en billetes de 1 y 5 para propinas.'},
- tips:['Adelanten el reloj 1 hora: Curazao va una hora adelante de Colombia.','Tengan la DI Card en PDF en el celular (y una copia impresa).','Sin maleta en bodega se sale rapidísimo del aeropuerto.'],
+ tips:[],
  steps:[
   {t:'3:45',s:'a.m.',h:'Salida hacia el aeropuerto El Dorado',wear:'Ropa cómoda de viaje y tenis. El vestido de baño, arriba en el morral.',d:'Calculen el tiempo desde donde duerman. Es un vuelo internacional. Alisten la plata del transporte (taxi o van entre varios).',cost:{id:'transp_bog',usd:8,label:'Transporte al aeropuerto El Dorado (aprox.)',base:1}},
   {t:'4:30',s:'a.m.',h:'Llegada a El Dorado · Terminal 1, internacional',w:'Aeropuerto El Dorado, Bogotá',d:'Hagan el check-in web de Avianca el día antes (solo llevan equipaje de mano). Luego pasan por Migración Colombia con el pasaporte. Revisen que nadie lleve líquidos de más de 100 ml. <b>Desayuno:</b> después de migración, en la zona de salas; un desayuno cuesta unos $40.000 a $60.000 pesos. Lleven plata para eso.',cost:{id:'comida_bog',usd:15,label:'Comida en el aeropuerto El Dorado',base:1}},
@@ -298,8 +298,8 @@ const DAYS=[
   {t:'1:45',s:'p.m.',h:'Ducha y descanso',d:'A las 2:40 salimos al kayak y a Willemstad.'},
   {t:'2:40',s:'p.m.',h:'Salida hacia Otrobanda y parqueo',wear:'<b>Para el kayak:</b> short o bermuda, camiseta fresca y sandalias de tira que se puedan mojar. <b>Para Punda y las fotos:</b> lleven en el morral una muda fresca y de colores (camisa o vestido) y se cambian en el baño del parque después del kayak. Zapato cómodo: hay adoquines y un puente flotante.',map:'Curaçao Rif Mangrove Park',w:'Curaçao Rif Mangrove Park · ~15 min',d:'Parqueen cerca del Mangrove Park o del Rif Fort: el carro se queda allí toda la tarde. <b>Hay que pagar parqueadero:</b> lleven efectivo, ojalá en florines (aprox. 1 Cg la hora).',cost:{id:'parqueo_lun',usd:1,label:'Parqueo lunes (parte de cada uno)',base:1}},
   {t:'3:00',s:'p.m.',h:'Kayak guiado por los manglares 🛶',g:'mangrove',tt:'mangrove',map:'Curaçao Rif Mangrove Park',d:'Un guía los lleva en kayak entre los manglares, con cangrejos y aves, en pleno centro de la ciudad. El agua es tranquila. Se reserva por correo a <b>info@mangrovepark.org</b>: pregunten si tienen turno a las 3:00. El parque abre de 8 a.m. a 5 p.m.',tags:[['Opcional','o'],['US$25','p']],cost:{id:'kayak',usd:25,label:'Kayak guiado manglares'}},
-  {t:'4:30',s:'p.m.',h:'Helados de Mina 🍦',g:'mina',map:'Emancipate Yourself from Mental Slavery Curaçao',w:'Frente a la obra "Emancipate Yourself from Mental Slavery" (Giovanni Abath), Otrobanda',d:'Caminando desde el manglar. Helado artesanal local, de unos US$2, y la foto con la escultura. Si quieren otro, Il Gelato queda en Kura Hulanda Village, también en Otrobanda.',cost:{id:'helado_mina',usd:2,label:'Helado de Mina'}},
-  {t:'4:50',s:'p.m.',h:'Rif Fort · subir a la muralla',g:'riffort',pick:{id:'paseo_willemstad',label:'Paseo por Willemstad (tarde y noche)'},map:'Rif Fort Curaçao',d:'Es la foto clásica de las fachadas de colores de Handelskade, del otro lado del agua.'},
+  {t:'4:30',s:'p.m.',h:'Helados de Mina 🍦',cost:{id:'helado_mina',usd:2,base:1,label:'Helado de Mina'},g:'mina',map:'Emancipate Yourself from Mental Slavery Curaçao',w:'Frente a la obra "Emancipate Yourself from Mental Slavery" (Giovanni Abath), Otrobanda',d:'Caminando desde el manglar. Helado artesanal local, de unos US$2, y la foto con la escultura. Si quieren otro, Il Gelato queda en Kura Hulanda Village, también en Otrobanda.'},
+  {t:'4:50',s:'p.m.',h:'Rif Fort · subir a la muralla',g:'riffort',map:'Rif Fort Curaçao',d:'Es la foto clásica de las fachadas de colores de Handelskade, del otro lado del agua.'},
   {t:'5:05',s:'p.m.',h:'Cruzar el Puente Reina Emma 🌉',g:'puente',tt:'willemstad',map:'Queen Emma Bridge Curaçao',d:'Es el puente flotante (la "Swinging Old Lady"). Si lo abren para que pase un barco, crucen en el ferry gratuito.'},
   {t:'5:15',s:'p.m.',h:'Handelskade y el cañón de los candados',g:'handelskade',map:'Handelskade Willemstad',d:'Los corazones de los candados colapsaron en 2025 por el peso, y desde entonces la gente cuelga los candados en el cañón histórico. Allí ponen el suyo y se toman la foto.'},
   {t:'5:30',s:'p.m.',h:'Fuerte Amsterdam',g:'fortams',map:'Fort Amsterdam Curaçao',d:'Es el patio amarillo donde está la sede del gobierno desde 1634, junto a la iglesia del fuerte (Fortkerk).'},
@@ -367,7 +367,7 @@ const DAYS=[
  outfit:['Mañana: vestido de baño para la última piscina.','Para el viaje: ropa cómoda. Déjenla a mano para cambiarse después de la piscina.'],
  meals:[['Desayuno','World Café · 7:30 a.m.'],['Almuerzo','World Café · 12:30 p.m. (el último 😢)'],['Cena','En el aeropuerto de Curazao (lleven plata)']],
  money:{base:'≈ US$15',txt:'Comida en el aeropuerto antes del vuelo. Dejen algo para el duty free y las propinas.'},
- tips:['Empaquen la noche del miércoles, antes de la rumba, o temprano en la mañana.','Recuerden el peso: 8 kg en el morral y 10 kg en la maleta de ruedas. Nada va en bodega.','Líquidos de máximo 100 ml. Los licores se compran en el duty free, después del control de seguridad.'],
+ tips:[],
  steps:[
   {t:'7:30',s:'a.m.',h:'Desayuno · World Café',wear:CASUAL,cls:'meal-st'},
   {t:'8:30',s:'a.m.',h:'Empacar y pesar maletas',d:'8 kg en el morral y 10 kg en la maleta de ruedas. Dejen fuera la ropa del viaje y el vestido de baño de la mañana.'},
@@ -614,9 +614,9 @@ function renderPlata(){
  return `<section class="view" id="v-plata" style="--day:#B8860B">
   <h2 class="sec-h">¿Cuánto dinero debo llevar? 💵</h2>
   <div class="card" style="margin-bottom:14px;border:2px solid var(--coral)"><h3>🙋 ¿Quién eres?</h3><p style="margin:0 0 8px">Toca tu nombre.</p><div class="who" id="who">${FAM.map(n=>`<button data-me="${n}" class="${n===store.get('dushi_me','')?'on':''}">${n}</button>`).join('')}</div>
-   <p style="margin:12px 0 6px">Vota <b>✅ Voy</b> o <b>❌ No voy</b> en cada actividad (aquí abajo o en cada día). Al final toca el botón verde y se lo mandas a Jeffry por WhatsApp.</p>
+   <p style="margin:12px 0 6px">Vota <b>✅ Voy</b> o <b>❌ No voy</b> en cada actividad (aquí abajo o en cada día).</p>
    <div class="prog"><i id="progBar"></i></div><div id="progTx" style="font-weight:700"></div>
-   <button class="wa" id="waBtn">📲 Enviar mis votos a Jeffry</button></div>
+   <p style="margin:8px 0 0;font-weight:600">👇 Cuando termines de votar, el botón verde para enviar está al final de esta página.</p></div>
   <p class="lead">Lo que pagan todos ya está sumado. Las actividades se suman solas cuando marcan <b>✅ Voy</b>. Precios por persona y aproximados.</p>
   <div class="total"><div><div class="lbl">Total en dólares</div><div class="v" id="tUsd">—</div></div><div><div class="lbl">En pesos</div><div class="v" id="tCop">—</div></div><div class="note" id="tNote"></div></div>
   <div class="card">
@@ -626,6 +626,7 @@ function renderPlata(){
   ${Object.entries(byDay).map(([day,list])=>`<div class="mday">${day}</div>`+list.map(c=>`
    ${c.base?`<div class="mrow"><span>● ${c.label}<small>Lo pagan todos</small></span><span class="amt">US$${c.usd}</span></div>`:joinBox(c)}`).join('')).join('')}
   ${(()=>{const ids=new Set(allCosts().map(c=>c.id));const extra=allPicks().filter(p=>!ids.has(p.id));return extra.length?`<div class="mday">Otras actividades (sin costo extra)</div>`+extra.map(c=>joinBox(c)).join(''):''})()}
+  <button class="wa" id="waBtn" style="margin-top:18px">📲 Ya voté: enviar mis votos a Jeffry</button>
   <div class="warn" style="margin-top:18px">El margen del 30% cubre la diferencia del cambio en la casa de cambio, propinas y gastos que siempre aparecen. Mezclen efectivo en billetes pequeños (playas, parqueo, propinas, kioscos) con tarjeta (actividades reservadas y tragos por fuera).</div>
  </section>`;
 }
