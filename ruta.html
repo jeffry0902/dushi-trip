@@ -64,7 +64,8 @@ html,body{margin:0;height:100%;overflow:hidden;background:#e9eef2;font-family:Ou
 .opts input{width:22px;height:22px;accent-color:var(--blue);flex:0 0 auto}
 .opts small{display:block;color:var(--muted);font-size:12.5px}
 #go{margin-top:10px;width:100%;max-width:440px;border:0;border-radius:16px;padding:16px;font:800 18px Outfit,sans-serif;background:var(--blue);color:#fff;cursor:pointer;box-shadow:0 8px 20px rgba(26,115,232,.35)}
-#back{margin-top:12px;color:var(--muted);font-size:14px}
+#back{display:block;margin-top:12px;padding:14px 18px;border-radius:14px;background:#0E3B53;color:#fff;font-weight:800;font-size:17px;text-decoration:none;text-align:center}
+#ctrlBack{position:absolute;left:12px;top:12px;z-index:7;background:#0E3B53;color:#fff;border-radius:999px;padding:11px 16px;font-weight:800;font-size:15px;text-decoration:none;box-shadow:0 3px 12px rgba(0,0,0,.25)}
 
 /* aviso final / descarga */
 #done{position:absolute;inset:0;z-index:11;background:rgba(15,25,35,.75);display:none;align-items:center;justify-content:center;padding:20px}
@@ -86,7 +87,8 @@ html,body{margin:0;height:100%;overflow:hidden;background:#e9eef2;font-family:Ou
 <div id="rec">● REC</div>
 <div id="banner"><div class="ic" id="bIc">↑</div><div class="tx"><b id="bTx">Sigue derecho</b><span id="bSub"></span></div></div>
 <div id="card"><img id="cImg" alt=""><div class="row"><div class="em" id="cEm">📍</div><div><div class="nm" id="cNm"></div><div class="sb" id="cSb"></div></div><div class="eta" id="cEta"></div></div><div class="guia" id="cGuia"></div><button class="next" id="cNext">Siguiente parada ▶</button><div class="dots" id="cDots"></div></div>
-<div id="ctrl" hidden><button id="bPlay" title="Pausa">⏸</button><button id="bFast" title="Más rápido">⏩</button><button id="bVoice" title="Voz del guía">🔊</button><button id="bExit" title="Salir">✕</button></div>
+<a id="ctrlBack" href="index.html" hidden>← Itinerario</a>
+<div id="ctrl" hidden><button id="bPrev" title="Parada anterior">⏮</button><button id="bPlay" title="Pausa">⏸</button><button id="bFast" title="Más rápido">⏩</button><button id="bVoice" title="Voz del guía">🔊</button><button id="bExit" title="Salir">✕</button></div>
 
 <div id="menu">
   <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><path d="M32 4C20 4 11 13 11 25c0 15 18 32 20 34a1.5 1.5 0 0 0 2 0c2-2 20-19 20-34C53 13 44 4 32 4z" fill="#EA4335"/><path d="M32 4c12 0 21 9 21 21 0 6-3 12-7 18L32 25z" fill="#4285F4"/><path d="M11 25C11 13 20 4 32 4v21L18 43c-4-6-7-12-7-18z" fill="#34A853"/><path d="M18 43l14-18 14 18c-6 8-12 14-13 16a1.5 1.5 0 0 1-2 0c-1-2-7-8-13-16z" fill="#FBBC04"/><circle cx="32" cy="25" r="8" fill="#fff"/></svg>
@@ -99,7 +101,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:#e9eef2;font-family:Ou
   </div>
   <button id="go">▶ Ver la ruta</button>
   <a id="back" href="index.html">← Volver al itinerario</a>
-  <p style="margin-top:14px;font-size:13px;max-width:440px">👉 Toca <b>▶</b> y mira la ruta. Al llegar a cada lugar, el guía les cuenta su historia. Con los botones de la derecha pueden pausar (⏸), ir más rápido (⏩) o salir (✕).</p>
+  <p style="margin-top:14px;font-size:13px;max-width:440px">👉 Toca <b>▶</b> y mira la ruta. Al llegar a cada lugar, el guía les cuenta su historia. Con los botones de la derecha pueden volver a la parada anterior (⏮), pausar (⏸), ir más rápido (⏩) o salir (✕).</p>
 </div>
 
 <div id="done"><div class="box"><div style="font-size:42px">🎉</div><h2>¡Ruta completa!</h2><p id="dTx" style="color:var(--muted);margin:0">Bon bini na Kòrsou</p><div id="dBtns"></div><button class="ag" id="dAgain">Ver otro día</button></div></div>
@@ -182,6 +184,7 @@ function idle(ms=3500){return Promise.race([new Promise(r=>map.once('idle',r)),s
 const QD=new URLSearchParams(location.search).get('d');
 let DAY=QD||location.hash.slice(1)||'dom'; if(!ROUTES[DAY])DAY='dom';
 const SINGLE=!!(QD&&ROUTES[QD]);
+if(SINGLE){document.getElementById('back').href='index.html#'+QD;document.getElementById('ctrlBack').href='index.html#'+QD}
 let paused=false, speed=1, voiceOn=true, running=false, abortRun=false, skipWait=null;
 const st={banner:null,card:null,arrived:false,intro:0,outro:0,photo:null};
 
@@ -234,7 +237,7 @@ async function animateLeg(route,mode,from,to){
   const steps=route.steps||[];
   let t0=performance.now(),elapsed=0,last=t0;
   while(elapsed<dur){
-    if(abortRun)return;
+    if(abortRun||backReq)return;
     await frame();const now=performance.now();
     if(!paused)elapsed+=(now-last)*speed;last=now;
     const k=ease(Math.min(1,elapsed/dur));const d=k*total;
@@ -289,7 +292,9 @@ async function run(){
     await waitPaused();
     await animateLeg(rts[i-1],stops[i].m||'car',stops[i-1].p,stops[i].p);
     if(abortRun)break;
+    if(backReq){backReq=false;i=Math.max(0,i-2);continue}
     await arrive(stops[i],i,stops.length);
+    if(backReq){backReq=false;i=Math.max(0,i-2);continue}
   }
   hideBanner();
   if(!abortRun){st.outro=performance.now();map.fitBounds(b,{padding:{top:120,bottom:200,left:40,right:40},pitch:0,bearing:0,duration:2500,maxZoom:14});await sleep(3200)}
@@ -354,7 +359,7 @@ function stopRec(){return new Promise(res=>{if(!recorder){res();return}
 $('go').onclick=async()=>{
   voiceOn=$('oVoice').checked;recording=$('oRec').checked;lastVideo=null;
   try{if(voiceOn&&!recording){const u=new SpeechSynthesisUtterance(' ');speechSynthesis.speak(u)}}catch(e){}
-  $('menu').classList.add('hide');$('ctrl').hidden=false;$('bVoice').classList.toggle('act',voiceOn);
+  $('menu').classList.add('hide');$('ctrl').hidden=false;$('ctrlBack').hidden=false;$('bVoice').classList.toggle('act',voiceOn);
   if(recording){toast('Preparando la grabación…',1500);MIME=await probeMime();$('rec').classList.add('on');toast('Grabando… deja la pantalla quieta hasta el final',3500)}
   st.intro=0;st.outro=0;paused=false;speed=1;$('bFast').classList.remove('act');$('bPlay').textContent='⏸';
   run();
@@ -362,8 +367,10 @@ $('go').onclick=async()=>{
 $('bPlay').onclick=()=>{paused=!paused;$('bPlay').textContent=paused?'▶':'⏸';try{paused?speechSynthesis.pause():speechSynthesis.resume()}catch(e){}};
 $('bFast').onclick=()=>{speed=speed===1?2.2:1;$('bFast').classList.toggle('act',speed>1)};
 $('bVoice').onclick=()=>{voiceOn=!voiceOn;$('bVoice').classList.toggle('act',voiceOn);if(!voiceOn)try{speechSynthesis.cancel()}catch(e){}};
-function exitToMenu(){abortRun=true;if(skipWait)skipWait();try{speechSynthesis.cancel()}catch(e){}if(recorder){try{recorder.stop()}catch(e){}recorder=null;cancelAnimationFrame(recRAF)}$('rec').classList.remove('on');hideBanner();$('card').classList.remove('on');$('ctrl').hidden=true;$('menu').classList.remove('hide');buildMenu()}
+function exitToMenu(){abortRun=true;if(skipWait)skipWait();try{speechSynthesis.cancel()}catch(e){}if(recorder){try{recorder.stop()}catch(e){}recorder=null;cancelAnimationFrame(recRAF)}$('rec').classList.remove('on');hideBanner();$('card').classList.remove('on');$('ctrl').hidden=true;$('ctrlBack').hidden=true;$('menu').classList.remove('hide');buildMenu()}
 $('bExit').onclick=exitToMenu;
+let backReq=false;
+$('bPrev').onclick=()=>{if(!running)return;backReq=true;if(paused){paused=false;$('bPlay').textContent='⏸'}if(skipWait)skipWait();try{speechSynthesis.cancel()}catch(e){}toast('⏮ Volviendo a la parada anterior',1400)};
 </script>
 </body>
 </html>
