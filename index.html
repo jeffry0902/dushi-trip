@@ -657,7 +657,7 @@ function show(id,noScroll){
  const b=document.querySelector(`.tab[data-v="${id}"]`); if(b)b.scrollIntoView({inline:'center',block:'nearest'});
  if(!noScroll){const y=document.getElementById('main').offsetTop-document.querySelector('nav.tabs').offsetHeight;window.scrollTo({top:Math.max(0,y),behavior:'instant'})}
  const bf=document.getElementById('backfab');if(bf&&id!=='hotel'){bf.remove();RET=null}
- calc();
+ calc();updInicio();
 }
 let speaking=null;
 document.addEventListener('click',e=>{
