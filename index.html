@@ -494,43 +494,56 @@ function renderComida(){
 }
 
 /* ===== INICIO (guía para la familia) ===== */
-const WA_NUM='573102132121';
+/* Votos: se guardan en la hoja de Google de Jeffry (Apps Script). Pegar aquí la URL de la aplicación web: */
+const VOTE_URL='';
 const FAM=['Jeffry','Juliette','Juan Esteban','William','Leila','Karina','Maryluz','Esmeralda'];
 function allPicks(){const out=[];DAYS.forEach(d=>d.steps.forEach(st=>[st.pick,st.cost,st.cost2].forEach(c=>{if(c&&!c.base)out.push({...c,day:d.tab,did:d.id})})));return out}
 function updInicio(){
  const ps=allPicks();const done=ps.filter(p=>joined[p.id]);const bar=document.getElementById('progBar');if(!bar)return;
  bar.style.width=(done.length/ps.length*100)+'%';
- document.getElementById('progTx').textContent=done.length===ps.length?'🎉 ¡Votaste todo! Ahora toca el botón verde para mandárselo a Jeffry.':`Llevas ${done.length} de ${ps.length} votos.`;
+ document.getElementById('progTx').textContent=done.length===ps.length?'🎉 ¡Votaste todo! Ahora toca el botón verde de abajo.':`Llevas ${done.length} de ${ps.length} votos.`;
 }
-/* ===== PANEL DE VOTOS (solo Jeffry, abre con el link de WhatsApp) ===== */
+/* ===== PANEL DE VOTOS (solo Jeffry: index.html#panel) ===== */
+let PANEL=null,PANEL_ERR='';
+async function loadPanel(){PANEL=null;PANEL_ERR='';refreshPanel();
+ if(!VOTE_URL){PANEL_ERR='Falta conectar la hoja de Google.';refreshPanel();return}
+ try{const r=await fetch(VOTE_URL+'?t='+Date.now());PANEL=await r.json()}catch(e){PANEL_ERR='No se pudieron cargar los votos. Revisa el internet y toca Actualizar.'}
+ refreshPanel()}
 function refreshPanel(){const o=document.getElementById('v-panel');if(!o)return;const on=o.classList.contains('on');o.outerHTML=renderPanel();if(on)document.getElementById('v-panel').classList.add('on')}
-function votesDB(){return store.get('dushi_votes',{})}
 function renderPanel(){
- const db=votesDB();const ps=allPicks();const names=FAM.filter(n=>db[n]).concat(Object.keys(db).filter(n=>!FAM.includes(n)));
+ const head=`<section class="view" id="v-panel" style="--day:#0E3B53"><h2 class="sec-h">📊 Votos de la familia</h2>`;
+ const upd=`<button class="bigbtn" id="panelLoad" style="border:0;width:100%;cursor:pointer">🔄 Actualizar</button>`;
+ if(!PANEL)return head+`<p class="lead">${PANEL_ERR||'Cargando votos…'}</p>${upd}</section>`;
+ const db=PANEL;const ps=allPicks();const names=FAM.filter(n=>db[n]).concat(Object.keys(db).filter(n=>!FAM.includes(n)));
  const ic=v=>v==='s'?'✅':v==='n'?'❌':'❔';
- return `<section class="view" id="v-panel" style="--day:#0E3B53">
-  <h2 class="sec-h">📊 Votos de la familia</h2>
-  <p class="lead">Cada vez que alguien te mande sus votos por WhatsApp, toca el link del mensaje y quedan guardados aquí (en este celular). Han votado <b>${names.length} de ${FAM.length}</b>${names.length<FAM.length?`. Faltan: ${FAM.filter(n=>!db[n]).join(', ')}`:''}.</p>
+ return head+`<p class="lead">Han votado <b>${names.length} de ${FAM.length}</b>${names.length<FAM.length?`. Faltan: <b>${FAM.filter(n=>!db[n]).join(', ')}</b>`:' 🎉'}.</p>${upd}
   ${ps.map(p=>{const si=names.filter(n=>db[n].v[p.id]==='s'),no=names.filter(n=>db[n].v[p.id]==='n');
    return `<div class="card" style="margin-bottom:10px"><h3 style="margin-bottom:4px">${p.label} <small style="color:var(--muted);font-weight:500">· ${p.day}</small></h3>
     <div style="font-size:15px"><b>✅ ${si.length} van:</b> ${si.join(', ')||'—'}<br><b>❌ ${no.length} no van:</b> ${no.join(', ')||'—'}</div></div>`}).join('')}
-  ${names.length?`<div class="card" style="overflow-x:auto"><h3>Tabla completa</h3><table class="vt"><tr><th></th>${names.map(n=>`<th>${n}</th>`).join('')}</tr>${ps.map(p=>`<tr><td>${p.label}</td>${names.map(n=>`<td>${ic(db[n].v[p.id])}</td>`).join('')}</tr>`).join('')}</table></div>`:''}
-  <button class="bigbtn" id="panelClear" style="border:0;background:#a8362a;width:100%;cursor:pointer">🗑️ Borrar todos los votos guardados</button>
+  ${names.length?`<div class="card" style="overflow-x:auto"><h3>Tabla completa</h3><table class="vt"><tr><th></th>${names.map(n=>`<th>${n}</th>`).join('')}</tr>${ps.map(p=>`<tr><td>${p.label}</td>${names.map(n=>`<td>${ic(db[n].v[p.id])}</td>`).join('')}</tr>`).join('')}<tr><td><b>Plata aprox.</b></td>${names.map(n=>`<td>${db[n].usd?'US$'+db[n].usd:''}</td>`).join('')}</tr></table></div>`:''}
  </section>`;
+}
+async function sendVotes(btn){
+ const me=store.get('dushi_me','');if(!me){alertBox('Primero toca tu nombre arriba (¿Quién eres?).');const w=document.getElementById('who');if(w)w.scrollIntoView({behavior:'smooth',block:'center'});return}
+ const ps=allPicks();const v={},labels={};ps.forEach(p=>{labels[p.id]=p.day+' · '+p.label;if(joined[p.id])v[p.id]=joined[p.id]==='si'?'s':'n'});
+ const falta=ps.length-Object.keys(v).length;
+ if(falta&&btn.dataset.ok!=='1'){btn.dataset.ok='1';btn.textContent=`⚠️ Te faltan ${falta} por votar. Toca otra vez para enviar así`;return}
+ if(!VOTE_URL){alertBox('La votación todavía no está activa. Intenta más tarde.');return}
+ const cs=allCosts();let usd=0;cs.forEach(c=>{if(c.base||joined[c.id]==='si')usd+=c.usd});
+ const body=JSON.stringify({n:me,v,labels,usd});
+ btn.disabled=true;btn.textContent='Enviando…';
+ let ok=false;
+ try{const r=await fetch(VOTE_URL,{method:'POST',body});const j=await r.json();ok=!!j.ok}catch(e){
+  try{await fetch(VOTE_URL,{method:'POST',body,mode:'no-cors'});ok=true}catch(_){}}
+ btn.disabled=false;btn.dataset.ok='';
+ if(ok){btn.textContent='✅ ¡Listo, '+me+'! Tus votos llegaron';store.set('dushi_sent',Date.now());alertBox('✅ Votos enviados. Si cambias algo, vuelve a tocar el botón.')}
+ else{btn.textContent='📨 Enviar mis votos';alertBox('No se pudo enviar. Revisa el internet e inténtalo otra vez.')}
 }
 document.addEventListener('click',e=>{
  const w=e.target.closest('[data-me]');if(w){store.set('dushi_me',w.dataset.me);document.querySelectorAll('[data-me]').forEach(b=>b.classList.toggle('on',b===w));return}
  const gt=e.target.closest('[data-goto]');if(gt){e.preventDefault();show(gt.dataset.goto);setTimeout(()=>{const el=document.querySelector(`.pick[data-pid="${gt.dataset.pid2}"]`);if(el)el.scrollIntoView({behavior:'smooth',block:'center'})},150);return}
- if(e.target.id==='waBtn'){const me=store.get('dushi_me','');if(!me){alertBox('Primero toca tu nombre arriba (¿Quién eres?).');document.getElementById('who')&&document.getElementById('who').scrollIntoView({behavior:'smooth',block:'center'});return}
-  const ps=allPicks();const si=ps.filter(p=>joined[p.id]==='si'),no=ps.filter(p=>joined[p.id]==='no'),na=ps.filter(p=>!joined[p.id]);
-  const L=a=>a.map(p=>`• ${p.day}: ${p.label}`).join('\n');
-  let t=`🇨🇼 *Dushi Trip* · Elecciones de *${me}*\n\n✅ *Voy:*\n${L(si)||'—'}\n\n❌ *No voy:*\n${L(no)||'—'}`;if(na.length)t+=`\n\n❔ *Sin decidir:*\n${L(na)}`;
-  const tot=document.getElementById('tUsd');calc();if(tot)t+=`\n\n💵 Plata aprox.: ${document.getElementById('tUsd').textContent}`;
-  const v={};ps.forEach(p=>{if(joined[p.id])v[p.id]=joined[p.id]==='si'?'s':'n'});
-  const link=location.origin+location.pathname+'#v='+encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify({n:me,v})))));
-  t+=`\n\n👉 Jeffry, toca aquí para guardar mis votos:\n${link}`;
-  location.href='https://wa.me/'+WA_NUM+'?text='+encodeURIComponent(t);}
- if(e.target.id==='panelClear'){const b=e.target;if(!b.dataset.ok){b.dataset.ok=1;b.textContent='⚠️ Toca otra vez para confirmar';return}store.set('dushi_votes',{});refreshPanel();return}
+ if(e.target.id==='sendBtn'){sendVotes(e.target);return}
+ if(e.target.id==='panelLoad'){loadPanel();return}
 });
 function alertBox(m){const d=document.createElement('div');d.textContent=m;d.style.cssText='position:fixed;left:16px;right:16px;bottom:24px;z-index:99;background:#0E3B53;color:#fff;padding:14px 16px;border-radius:14px;font-weight:600;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.3)';document.body.appendChild(d);setTimeout(()=>d.remove(),3500)}
 
@@ -616,7 +629,7 @@ function renderPlata(){
   <div class="card" style="margin-bottom:14px;border:2px solid var(--coral)"><h3>🙋 ¿Quién eres?</h3><p style="margin:0 0 8px">Toca tu nombre.</p><div class="who" id="who">${FAM.map(n=>`<button data-me="${n}" class="${n===store.get('dushi_me','')?'on':''}">${n}</button>`).join('')}</div>
    <p style="margin:12px 0 6px">Vota <b>✅ Voy</b> o <b>❌ No voy</b> en cada actividad (aquí abajo o en cada día).</p>
    <div class="prog"><i id="progBar"></i></div><div id="progTx" style="font-weight:700"></div>
-   <p style="margin:8px 0 0;font-weight:600">👇 Cuando termines de votar, el botón verde para enviar está al final de esta página.</p></div>
+   <p style="margin:8px 0 0;font-weight:600">👇 Cuando termines, toca el botón verde <b>Enviar mis votos</b> al final de esta página. Si después cambias de idea, cambias el voto y lo envías otra vez.</p></div>
   <p class="lead">Lo que pagan todos ya está sumado. Las actividades se suman solas cuando marcan <b>✅ Voy</b>. Precios por persona y aproximados.</p>
   <div class="total"><div><div class="lbl">Total en dólares</div><div class="v" id="tUsd">—</div></div><div><div class="lbl">En pesos</div><div class="v" id="tCop">—</div></div><div class="note" id="tNote"></div></div>
   <div class="card">
@@ -626,7 +639,7 @@ function renderPlata(){
   ${Object.entries(byDay).map(([day,list])=>`<div class="mday">${day}</div>`+list.map(c=>`
    ${c.base?`<div class="mrow"><span>● ${c.label}<small>Lo pagan todos</small></span><span class="amt">US$${c.usd}</span></div>`:joinBox(c)}`).join('')).join('')}
   ${(()=>{const ids=new Set(allCosts().map(c=>c.id));const extra=allPicks().filter(p=>!ids.has(p.id));return extra.length?`<div class="mday">Otras actividades (sin costo extra)</div>`+extra.map(c=>joinBox(c)).join(''):''})()}
-  <button class="wa" id="waBtn" style="margin-top:18px">📲 Ya voté: enviar mis votos a Jeffry</button>
+  <button class="wa" id="sendBtn" style="margin-top:18px">📨 Enviar mis votos</button>
   <div class="warn" style="margin-top:18px">El margen del 30% cubre la diferencia del cambio en la casa de cambio, propinas y gastos que siempre aparecen. Mezclen efectivo en billetes pequeños (playas, parqueo, propinas, kioscos) con tarjeta (actividades reservadas y tragos por fuera).</div>
  </section>`;
 }
@@ -691,9 +704,7 @@ fetch('https://open.er-api.com/v6/latest/USD').then(r=>r.json()).then(j=>{if(j&&
 /* default view: today's day during the trip, else last viewed, else Antes */
 function handleHash(){
  const h=location.hash;
- if(h.startsWith('#v=')){try{const o=JSON.parse(decodeURIComponent(escape(atob(decodeURIComponent(h.slice(3))))));
-   if(o&&o.n&&o.v){const db=votesDB();db[o.n]={v:o.v,t:Date.now()};store.set('dushi_votes',db);refreshPanel();show('panel');history.replaceState(null,'',location.pathname);alertBox('✅ Guardados los votos de '+o.n);return true}}catch(e){}}
- if(h==='#panel'){refreshPanel();show('panel');return true}
+ if(h==='#panel'){show('panel');loadPanel();return true}
  if(h.length>1&&VIEWS.some(x=>x.id===h.slice(1))){show(h.slice(1));return true}
  return false}
 window.addEventListener('hashchange',handleHash);
