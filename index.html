@@ -494,7 +494,7 @@ function renderComida(){
 }
 
 /* ===== INICIO (guía para la familia) ===== */
-const WA_NUM=''; // número de Jeffry con código de país, ej. '573001234567'
+const WA_NUM='573102132121';
 const FAM=['Jeffry','Juliette','Juan Esteban','William','Leila','Karina','Maryluz','Esmeralda'];
 function allPicks(){const out=[];DAYS.forEach(d=>d.steps.forEach(st=>[st.pick,st.cost,st.cost2].forEach(c=>{if(c&&!c.base)out.push({...c,day:d.tab,did:d.id})})));return out}
 function updInicio(){
